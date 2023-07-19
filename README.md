@@ -1,5 +1,11 @@
 # SRAI
 
+## SR
+
+```
+https://sverigesradio.se/ekot/textarkiv
+```
+
 Steps:
 
 1. Download, convert and transcribe.

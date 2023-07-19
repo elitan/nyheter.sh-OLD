@@ -1,0 +1,28 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "codegen": "kysely-codegen --dialect postgres --camel-case --out-file ./src/utils/kysely-types.d.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cheerio": "1.0.0-rc.12",
+    "dotenv": "^16.3.1",
+    "kysely": "^0.26.1",
+    "kysely-codegen": "^0.10.1",
+    "openai": "^3.3.0",
+    "pg": "^8.11.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.10.2"
+  }
+}

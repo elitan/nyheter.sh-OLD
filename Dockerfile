@@ -21,6 +21,7 @@ WORKDIR /app
 
 COPY --from=builder /build/whisper.cpp/main ./
 RUN mv main whisper
+RUN mv whisper /usr/local/bin/whisper
 
 # SVTPlay-DL
 RUN curl -L https://svtplay-dl.se/download/latest/svtplay-dl -o /usr/local/bin/svtplay-dl
@@ -30,4 +31,6 @@ COPY models models
 COPY main.sh main.sh
 RUN chmod +x main.sh
 
-ENTRYPOINT ["/app/main.sh"]
+## tail 
+CMD ["sleep", "infinity"]
+# ENTRYPOINT ["/app/main.sh"]

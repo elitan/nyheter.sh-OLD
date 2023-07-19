@@ -11,23 +11,24 @@ srlink=$1
 # You can then use the filename variable in your script
 echo "SR link is: $srlink"
 
-# Collecting time for svtplay-dl
+# svtplay-dl
 start=$(date +%s)
 svtplay-dl $srlink --force -o /tmp/whisper/raw
 end=$(date +%s)
 time_svtplay=$(($end - $start))
 echo "svtplay-dl took $time_svtplay seconds."
 
-# Collecting time for ffmpeg
+# ffmpeg
 start=$(date +%s)
 ffmpeg -y -i /tmp/whisper/raw.mp4 -ar 16000 /tmp/whisper/converted.wav
 end=$(date +%s)
 time_ffmpeg=$(($end - $start))
 echo "ffmpeg conversion took $time_ffmpeg seconds."
 
-# Collecting time for main program
+# Whisper
 start=$(date +%s)
-./whisper -m models/ggml-large.bin -l sv -nt -f /tmp/whisper/converted.wav
+# store output in output.txt
+./whisper -m models/ggml-large.bin -l sv -nt -f /tmp/whisper/converted.wav --output-txt --output-file output
 end=$(date +%s)
 time_main=$(($end - $start))
 echo "main program took $time_main seconds."
