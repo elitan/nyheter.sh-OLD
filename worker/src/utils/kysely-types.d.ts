@@ -14,6 +14,7 @@ export interface Articles {
   sverigesRadioTitle: string;
   sverigesRadioLink: string;
   transcribedText: string | null;
+  slug: string | null;
 }
 
 export interface DB {
