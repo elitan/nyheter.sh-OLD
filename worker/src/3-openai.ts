@@ -3,7 +3,19 @@ import "dotenv/config";
 import { openai } from "./utils/openai";
 import slugify from "slugify";
 
-const GPT_PROMPT = `Du är en journalist som skriver oberoende nyhetsartikel baserat på transiberade ljudinspelningar. Nyhetsartiklarna du skriver följer journalistisk standard och är informativ och engagerande för läsaren.  Nyhetsartiklen ska vara helt oberoende. Du kommer att rapportera om de senaste nyheterna, skriva reportage och åsiktsartiklar, utveckla forskningstekniker för att verifiera information och avslöja källor, följa journalistisk etik och leverera korrekt rapportering med din egen distinkta stil. Skriv inget om vem som spelat in ljudinspelningen. Skriv inget om SR, P4 eller Ekot.`;
+/**
+ * Removes the last sentence from a string.
+ */
+function removeLastSentence(str: string) {
+  let sentences = str.match(/[^.!?]+[.!?]*/g); // matches sentences ending with ., ! or ?
+  if (sentences) {
+    sentences.pop(); // removes the last sentence
+    return sentences.join("");
+  }
+  return str;
+}
+
+const GPT_PROMPT = `Du är en journalist som skriver oberoende nyhetsartikelar. Nyhetsartiklarna du skriver följer journalistisk standard och är informativ och engagerande för läsaren.`;
 
 (async () => {
   const articlesToRefine = await db
@@ -17,11 +29,9 @@ const GPT_PROMPT = `Du är en journalist som skriver oberoende nyhetsartikel bas
     console.log("article: ", article);
 
     // body
-    const bodyContent = `Skriv en nyhetsartikel som inte innehåller någon rubrik.
-
-transkiberad ljudfil:
-
-${article.transcribedText}`;
+    const bodyContent = `INFORMATION: ${removeLastSentence(
+      article.transcribedText!
+    )} SLUT PÅ INFORMATION. Skriv en kort, informativ och enkel nyhetsartikel utan rubrik och utan att nämna ditt namn.`;
 
     const openAiBodyResponse = await openai.createChatCompletion({
       messages: [
@@ -34,7 +44,7 @@ ${article.transcribedText}`;
           content: bodyContent,
         },
       ],
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       temperature: 0.5,
       max_tokens: 1200,
     });
@@ -43,7 +53,7 @@ ${article.transcribedText}`;
     console.log("body: ", body);
 
     // title
-    const titleContent = `Skriv en titel för följande nyhetsartikel:
+    const titleContent = `Skriv mycker kort rubrik på max 8 ord för följande nyetsartikel:
 
     ${body}`;
 
@@ -58,7 +68,7 @@ ${article.transcribedText}`;
           content: titleContent,
         },
       ],
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       temperature: 0.5,
       max_tokens: 1200,
     });
