@@ -10,7 +10,7 @@ export const getServerSideProps = async () => {
     .selectFrom("articles")
     .select(["id", "createdAt", "title", "slug", "body"])
     .where("title", "is not", null)
-    .orderBy("id", "desc")
+    .orderBy("createdAt", "desc")
     .limit(50)
     .execute();
 
@@ -43,7 +43,6 @@ const Page = (
 
           const ago = formatDistanceToNowStrict(article.createdAt, {
             addSuffix: true,
-            locale: sv,
           });
 
           const summary = getFirstTwoSentences(article.body);
@@ -56,7 +55,7 @@ const Page = (
               <div className='w-56 text-xs text-gray-400'>{ago}</div>
               <div className='w-full'>
                 <div className='w-full text-xl mb-1'>
-                  <a href={`/artikel/${article.slug}`}>{article.title}</a>
+                  <a href={`/nyheter/${article.slug}`}>{article.title}</a>
                 </div>
                 <div className='text-gray-700'>{summary}</div>
               </div>
