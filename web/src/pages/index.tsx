@@ -1,9 +1,8 @@
 import { db } from "@/utils/db";
 import { getFirstTwoSentences } from "@/utils/helpers";
 import { formatDistanceToNowStrict } from "date-fns";
-import { sv } from "date-fns/locale";
 
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import type { InferGetServerSidePropsType } from "next";
 
 export const getServerSideProps = async () => {
   const articles = await db
