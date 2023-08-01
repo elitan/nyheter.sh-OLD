@@ -29,6 +29,8 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.9",
     "@types/pg": "^8.10.2"
   }
 }

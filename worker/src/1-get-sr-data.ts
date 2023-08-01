@@ -2,6 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import { db, pool } from "./utils/db";
 import "dotenv/config";
+import { utcToZonedTime } from "date-fns-tz";
 
 const url = "https://sverigesradio.se/ekot/textarkiv"; // Replace this with the URL you want to fetch
 const baseUrl = "https://sverigesradio.se";
@@ -35,25 +36,36 @@ const baseUrl = "https://sverigesradio.se";
       .where("sverigesRadioLink", "=", sverigesRadioLink)
       .execute();
 
-    if (articles.length > 0) {
-      console.log("Already exists");
-      continue;
-    }
-
     // get actual article and publication date
     const articleResponse = await axios.get(sverigesRadioLink);
     $ = cheerio.load(articleResponse.data);
     let timeElement = $(
       "div.publication-metadata time.publication-metadata__item"
     );
-    let datetimeAttr = timeElement.attr("datetime");
+
+    let datetimeAttr = timeElement.attr("datetime") as string;
+    datetimeAttr = datetimeAttr.replace("Z", "");
+    console.log({ datetimeAttr });
+    const utcDate = new Date(datetimeAttr);
+    console.log({ utcDate });
+    const localSwedishDatetime = utcToZonedTime(
+      datetimeAttr,
+      "Europe/Stockholm"
+    );
+
+    console.log({ localSwedishDatetime });
+
+    if (articles.length > 0) {
+      console.log("Already exists");
+      continue;
+    }
 
     await db
       .insertInto("articles")
       .values({
         sverigesRadioTitle,
         sverigesRadioLink,
-        createdAt: datetimeAttr,
+        createdAt: localSwedishDatetime,
       })
       .execute();
   }

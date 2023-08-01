@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "cheerio": "1.0.0-rc.12",
+    "date-fns-tz": "^2.0.0",
     "dotenv": "^16.3.1",
     "kysely": "^0.26.1",
     "kysely-codegen": "^0.10.1",

@@ -37,10 +37,10 @@ export default function Page(
 
   return (
     <main className='max-w-2xl mx-auto '>
-      <div className='py-24'>
-        <div className='text-3xl mb-6 text-gray-950'>{article.title}</div>
-        <div className='text-gray-700 whitespace-pre-line'>{article.body}</div>
-      </div>
+      <article className='py-24 prose'>
+        <h1 className='text-3xl mb-6 text-gray-950'>{article.title}</h1>
+        {article.body}
+      </article>
     </main>
   );
 }
