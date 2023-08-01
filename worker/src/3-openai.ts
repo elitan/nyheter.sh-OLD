@@ -15,7 +15,7 @@ function removeLastSentence(str: string) {
   return str;
 }
 
-const GPT_PROMPT = `Du är en journalist som skriver oberoende nyhetsartikelar. Nyhetsartiklarna du skriver följer journalistisk standard och är informativ och engagerande för läsaren.`;
+const GPT_PROMPT = `You are a journalist who writes independent news articles. The news articles you write follow journalistic standards and are informative and engaging for the reader.`;
 
 (async () => {
   const articlesToRefine = await db
@@ -23,6 +23,7 @@ const GPT_PROMPT = `Du är en journalist som skriver oberoende nyhetsartikelar. 
     .select(["id", "transcribedText"])
     .where("transcribedText", "is not", null)
     .where("body", "is", null)
+    .orderBy("id", "asc")
     .execute();
 
   for (const article of articlesToRefine) {
@@ -31,7 +32,7 @@ const GPT_PROMPT = `Du är en journalist som skriver oberoende nyhetsartikelar. 
     // body
     const bodyContent = `INFORMATION: ${removeLastSentence(
       article.transcribedText!
-    )} SLUT PÅ INFORMATION. Skriv en kort, informativ och enkel nyhetsartikel utan rubrik och utan att nämna ditt namn.`;
+    )} END OF INFORMATION. Write a short, informative and simple news article without a headline and without mentioning your name. Write in english.`;
 
     const openAiBodyResponse = await openai.createChatCompletion({
       messages: [
@@ -53,7 +54,7 @@ const GPT_PROMPT = `Du är en journalist som skriver oberoende nyhetsartikelar. 
     console.log("body: ", body);
 
     // title
-    const titleContent = `Skriv mycker kort rubrik på max 8 ord för följande nyetsartikel:
+    const titleContent = `Write a very short headline of a maximum of 8 words for the following news article:
 
     ${body}`;
 

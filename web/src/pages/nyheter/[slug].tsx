@@ -39,7 +39,9 @@ export default function Page(
     <main className='max-w-2xl mx-auto '>
       <article className='py-24 prose'>
         <h1 className='text-3xl mb-6 text-gray-950'>{article.title}</h1>
-        {article.body}
+        {article.body?.split("\n").map((paragraph, index) => {
+          return <p key={index}>{paragraph}</p>;
+        })}
       </article>
     </main>
   );

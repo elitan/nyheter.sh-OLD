@@ -1,0 +1,25 @@
+name: Deploy to prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-to-prod:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Execute remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: 178.174.177.236
+          port: 444
+          username: github
+          key: ${{ secrets.ai }}
+          script: |
+            cd ~/code/srai
+            ./scripts/deploy.sh

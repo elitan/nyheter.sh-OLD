@@ -3,6 +3,7 @@ import * as cheerio from "cheerio";
 import { db, pool } from "./utils/db";
 import "dotenv/config";
 import { utcToZonedTime } from "date-fns-tz";
+import { sql } from "kysely";
 
 const url = "https://sverigesradio.se/ekot/textarkiv"; // Replace this with the URL you want to fetch
 const baseUrl = "https://sverigesradio.se";
@@ -44,30 +45,33 @@ const baseUrl = "https://sverigesradio.se";
     );
 
     let datetimeAttr = timeElement.attr("datetime") as string;
-    datetimeAttr = datetimeAttr.replace("Z", "");
-    console.log({ datetimeAttr });
-    const utcDate = new Date(datetimeAttr);
-    console.log({ utcDate });
-    const localSwedishDatetime = utcToZonedTime(
-      datetimeAttr,
-      "Europe/Stockholm"
-    );
 
-    console.log({ localSwedishDatetime });
+    const date = new Date(datetimeAttr);
+    console.log({ date });
+
+    const a = db.insertInto("articles").values({
+      sverigesRadioTitle,
+      sverigesRadioLink,
+      createdAt: date,
+    });
+
+    console.log(a.compile());
 
     if (articles.length > 0) {
       console.log("Already exists");
       continue;
     }
 
-    await db
-      .insertInto("articles")
-      .values({
-        sverigesRadioTitle,
-        sverigesRadioLink,
-        createdAt: localSwedishDatetime,
-      })
-      .execute();
+    await a.execute();
+
+    // await db
+    //   .insertInto("articles")
+    //   .values({
+    //     sverigesRadioTitle,
+    //     sverigesRadioLink,
+    //     createdAt: sql`(TIMESTAMP ${datetimeAttr} AT TIME ZONE 'Europe/Stockholm')`,
+    //   })
+    //   .execute();
   }
 
   console.log("Done");

@@ -32,8 +32,8 @@ const Page = (
 ) => {
   return (
     <main className='max-w-4xl mx-auto '>
-      <div className='text-center py-12 text-3xl font-semibold uppercase'>
-        Nyheter
+      <div className='text-center py-12 text-2xl uppercase'>
+        Svenska Nyheter på Engelska
       </div>
       <div className=''>
         {props.articles.map((article) => {

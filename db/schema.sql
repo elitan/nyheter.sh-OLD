@@ -9,3 +9,4 @@ CREATE TABLE articles(
   transcribed_text text
 );
 
+

@@ -60,7 +60,7 @@ function runCommand(cmd: string, timeout = 5000): Promise<string> {
       ); // 10 min timeout
     } catch (error) {
       console.error(`Failed to execute script: ${error}`);
-      process.exit(1);
+      continue;
     }
 
     console.log(`Getting the output`);
