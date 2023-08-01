@@ -19,7 +19,7 @@ jobs:
           host: 178.174.177.236
           port: 444
           username: github
-          key: ${{ secrets.ai }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/code/srai
             ./scripts/deploy.sh
