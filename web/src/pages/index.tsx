@@ -65,7 +65,7 @@ const Page = (
                   {article.title}
                 </h1>
                 <p className='text-gray-700 line-clamp-2 prose'>{summary}</p>
-                <div className='flex items-center space-x-1 mt-2'>
+                <div className='flex items-center space-x-1 mt-2 font-semibold'>
                   <div>Läs mer</div>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
