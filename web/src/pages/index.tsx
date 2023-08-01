@@ -68,7 +68,7 @@ const Page = (
                   </h1>
                   <p className='text-gray-700 line-clamp-2 prose'>{summary}</p>
                   <div className='flex justify-between mt-2 items-baseline'>
-                    <div className='flex items-center space-x-1 mt-2 font-semibold text-blue-700'>
+                    <div className='flex items-center space-x-1 mt-2 font-semibold text-gray-800'>
                       <div>Read more</div>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
