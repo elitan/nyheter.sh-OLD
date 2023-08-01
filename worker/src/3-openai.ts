@@ -138,4 +138,6 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
       .where('id', '=', article.id)
       .execute();
   }
+  console.log('done');
+  process.exit(0);
 })();
