@@ -101,7 +101,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
       .executeTakeFirst();
 
     // get unsplash image
-    const imageQueryContent = `ARTICLE: ${body} END OF ARTICLE. Create a search query using 2 words in English for the Unsplash API for the article above. Make the two words the most relevant words for the article above. Respond only with two words and nothing else.`;
+    const imageQueryContent = `ARTICLE: ${body} END OF ARTICLE. Create a search query using 4 words in English for the Unsplash API for the article above. Make the two words the most relevant words for the article above. Respond only with two words and nothing else.`;
 
     const openAiImageQueryResponse = await openai.createChatCompletion({
       messages: [
