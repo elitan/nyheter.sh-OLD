@@ -15,24 +15,9 @@ export interface Articles {
   sverigesRadioTitle: string;
   sverigesRadioLink: string;
   transcribedText: string | null;
-}
-
-export interface ArticleTags {
-  id: Generated<number>;
-  createdAt: Generated<Timestamp | null>;
-  articleId: number;
-  tagId: number;
-}
-
-export interface Tags {
-  id: Generated<number>;
-  createdAt: Generated<Timestamp | null>;
-  name: string;
-  slug: string;
+  imageUrl: string | null;
 }
 
 export interface DB {
   articles: Articles;
-  articleTags: ArticleTags;
-  tags: Tags;
 }

@@ -1,10 +1,6 @@
 import { db } from "@/utils/db";
 import { getFirstTwoSentences } from "@/utils/helpers";
-import {
-  format,
-  formatDistanceToNow,
-  formatDistanceToNowStrict,
-} from "date-fns";
+import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 
 import type { InferGetServerSidePropsType } from "next";
@@ -12,7 +8,7 @@ import type { InferGetServerSidePropsType } from "next";
 export const getServerSideProps = async () => {
   const articles = await db
     .selectFrom("articles")
-    .select(["id", "createdAt", "title", "slug", "body"])
+    .select(["id", "createdAt", "title", "slug", "body", "imageUrl"])
     .where("title", "is not", null)
     .orderBy("createdAt", "desc")
     .limit(50)
@@ -31,9 +27,9 @@ const Page = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   return (
-    <main className='max-w-4xl mx-auto '>
+    <main className='max-w-3xl mx-auto '>
       <div className='text-center py-12 text-2xl uppercase'>
-        Svenska Nyheter på Engelska
+        Swedish news in English
       </div>
       <div className=''>
         {props.articles.map((article) => {
@@ -54,33 +50,43 @@ const Page = (
 
           return (
             <div key={article.id} className='flex my-4 space-x-4'>
-              <div className='w-56 text-xs text-gray-400 py-8'>
-                {formattedDate}
-              </div>
               <a
-                className='w-full hover:bg-slate-100 p-6 rounded-lg'
+                className='w-full hover:bg-slate-50 rounded-lg p-1'
                 href={`/nyheter/${article.slug}`}
               >
-                <h1 className='w-full text-xl mb-1 prose-h1:'>
-                  {article.title}
-                </h1>
-                <p className='text-gray-700 line-clamp-2 prose'>{summary}</p>
-                <div className='flex items-center space-x-1 mt-2 font-semibold'>
-                  <div>Läs mer</div>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={3}
-                    stroke='currentColor'
-                    className='w-3 h-3'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M8.25 4.5l7.5 7.5-7.5 7.5'
-                    />
-                  </svg>
+                <div
+                  className='h-80 border border-gray-200 rounded-lg'
+                  style={{
+                    backgroundImage: `url(${article.imageUrl})`,
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                  }}
+                />
+                <div className='p-6'>
+                  <h1 className='w-full text-xl mb-1 prose-h1:'>
+                    {article.title}
+                  </h1>
+                  <p className='text-gray-700 line-clamp-2 prose'>{summary}</p>
+                  <div className='flex justify-between mt-2 items-baseline'>
+                    <div className='flex items-center space-x-1 mt-2 font-semibold text-blue-700'>
+                      <div>Read more</div>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        fill='none'
+                        viewBox='0 0 24 24'
+                        strokeWidth={3}
+                        stroke='currentColor'
+                        className='w-3 h-3'
+                      >
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          d='M8.25 4.5l7.5 7.5-7.5 7.5'
+                        />
+                      </svg>
+                    </div>
+                    <div className='text-xs text-gray-400'>{formattedDate}</div>
+                  </div>
                 </div>
               </a>
             </div>

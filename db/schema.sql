@@ -6,7 +6,7 @@ CREATE TABLE articles(
   body text,
   sveriges_radio_title varchar(255) NOT NULL,
   sveriges_radio_link varchar(255) NOT NULL,
-  transcribed_text text
+  transcribed_text text,
+  image_url text
 );
-
 

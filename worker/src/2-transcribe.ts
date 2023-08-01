@@ -1,6 +1,6 @@
-import * as child_process from "child_process";
-import { db, pool } from "./utils/db";
-import "dotenv/config";
+import * as child_process from 'child_process';
+import { db, pool } from './utils/db';
+import 'dotenv/config';
 
 /**
  * Executes a shell command and return it as a Promise.
@@ -26,37 +26,37 @@ function runCommand(cmd: string, timeout = 5000): Promise<string> {
 
 (async () => {
   const articlesToTranscribe = await db
-    .selectFrom("articles")
-    .select(["id", "sverigesRadioLink", "sverigesRadioTitle"])
-    .where("transcribedText", "is", null)
+    .selectFrom('articles')
+    .select(['id', 'sverigesRadioLink', 'sverigesRadioTitle'])
+    .where('transcribedText', 'is', null)
     .execute();
 
   for (const article of articlesToTranscribe) {
     try {
       console.log(
-        `Transcribing article id: ${article.id} (${article.sverigesRadioTitle})`
+        `Transcribing article id: ${article.id} (${article.sverigesRadioTitle})`,
       );
 
       console.log(`Downloading episode...`);
       try {
         await runCommand(
-          `svtplay-dl ${article.sverigesRadioLink} --force -o /tmp/whisper/raw`
+          `svtplay-dl ${article.sverigesRadioLink} --force -o /tmp/whisper/raw`,
         );
       } catch (error) {
         console.error(`Failed to download episode: ${error}`);
-        await db.deleteFrom("articles").where("id", "=", article.id).execute();
+        await db.deleteFrom('articles').where('id', '=', article.id).execute();
         continue;
       }
 
       console.log(`Encoding episode...`);
       await runCommand(
-        "ffmpeg -y -i /tmp/whisper/raw.mp4 -ar 16000 /tmp/whisper/converted.wav"
+        'ffmpeg -y -i /tmp/whisper/raw.mp4 -ar 16000 /tmp/whisper/converted.wav',
       );
 
       console.log(`Transcribing episode...`);
       await runCommand(
-        "whisper -m ../models/ggml-large.bin -l sv -nt -f /tmp/whisper/converted.wav --output-txt --output-file output",
-        600_000
+        'whisper -m ../models/ggml-large.bin -l sv -nt -f /tmp/whisper/converted.wav --output-txt --output-file output',
+        600_000,
       ); // 10 min timeout
     } catch (error) {
       console.error(`Failed to execute script: ${error}`);
@@ -64,18 +64,19 @@ function runCommand(cmd: string, timeout = 5000): Promise<string> {
     }
 
     console.log(`Getting the output`);
-    const transcribedText = await runCommand("cat output.txt");
+    const transcribedText = await runCommand('cat output.txt');
 
     console.log(`Storing the transcribed text in the database`);
     await db
-      .updateTable("articles")
+      .updateTable('articles')
       .set({
         transcribedText,
       })
-      .where("id", "=", article.id)
+      .where('id', '=', article.id)
       .execute();
   }
 
-  console.log("Done");
+  console.log('Done');
   pool.end();
+  process.exit(0);
 })();

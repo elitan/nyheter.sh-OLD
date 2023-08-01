@@ -10,11 +10,12 @@ export interface Articles {
   id: Generated<number>;
   createdAt: Generated<Timestamp | null>;
   title: string | null;
+  slug: string | null;
   body: string | null;
   sverigesRadioTitle: string;
   sverigesRadioLink: string;
   transcribedText: string | null;
-  slug: string | null;
+  imageUrl: string | null;
 }
 
 export interface DB {
