@@ -27,11 +27,11 @@ const Page = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   return (
-    <main className='max-w-3xl mx-auto '>
+    <main className='max-w-6xl mx-auto '>
       <div className='text-center py-12 text-2xl uppercase'>
         Swedish news in English
       </div>
-      <div className=''>
+      <div className='grid grid-cols-2 gap-8'>
         {props.articles.map((article) => {
           if (
             !article.title ||
@@ -55,7 +55,7 @@ const Page = (
                 href={`/nyheter/${article.slug}`}
               >
                 <div
-                  className='h-80 border border-gray-200 rounded-lg'
+                  className='h-64 border border-gray-200 rounded-lg'
                   style={{
                     backgroundImage: `url(${article.imageUrl})`,
                     backgroundPosition: "center",
