@@ -9,7 +9,7 @@ import { twMerge } from "tailwind-merge";
 export const getServerSideProps = async () => {
   const articles = await db
     .selectFrom("articles")
-    .select(["id", "createdAt", "title", "slug", "body", "imageData"])
+    .select(["id", "createdAt", "title", "slug", "body", "imageUrl"])
     .where("title", "is not", null)
     .orderBy("createdAt", "desc")
     .limit(50)
@@ -66,7 +66,7 @@ const Page = (
                 <div
                   className={imageContainerClasses}
                   style={{
-                    backgroundImage: `url(${article.imageData})`,
+                    backgroundImage: `url(${article.imageUrl})`,
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                   }}

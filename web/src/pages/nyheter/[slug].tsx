@@ -11,7 +11,7 @@ export async function getServerSideProps({ params }: { params: IParams }) {
 
   const article = await db
     .selectFrom("articles")
-    .selectAll()
+    .select(["id", "title", "body", "imageUrl"])
     .where("slug", "=", slug)
     .executeTakeFirst();
 
@@ -39,7 +39,7 @@ export default function Page(
         <div
           className='h-80 border border-gray-200 rounded-lg mb-6'
           style={{
-            backgroundImage: `url(${article.imageData})`,
+            backgroundImage: `url(${article.imageUrl})`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
