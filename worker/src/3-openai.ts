@@ -88,6 +88,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
 
     const slug = slugify(title, {
       lower: true,
+      strict: true,
     });
 
     await db
