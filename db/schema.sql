@@ -8,6 +8,7 @@ CREATE TABLE articles(
   sveriges_radio_link varchar(255) NOT NULL,
   transcribed_text text,
   image_url text,
+  image_prompt text,
   image_data text
 );
 

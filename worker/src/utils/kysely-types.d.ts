@@ -17,6 +17,7 @@ export interface Articles {
   transcribedText: string | null;
   imageUrl: string | null;
   imageData: string | null;
+  imagePrompt: string | null;
 }
 
 export interface DB {

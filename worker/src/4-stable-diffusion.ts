@@ -23,7 +23,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
      * GET IMAGE PROMPT
      */
 
-    const imageQueryContent = `ARTICLE:\n ${article.title}\n${article.body}\nEND OF ARTICLE.\n\nWrite a  description for an image for the news article above. Make the image description short and simple. Also make the image description generic. Don't include any text in the image you're prompting. `;
+    const imageQueryContent = `ARTICLE:\n ${article.title}\n${article.body}\nEND OF ARTICLE.\n\nWrite a  description for an image for the news article above. Make the image description short and simple. Also make the image description generic. Don't include any text in the image you're prompting. Please include references to Sweden if you're able to.`;
 
     const openAiImageQueryResponse = await openai.createChatCompletion({
       messages: [
@@ -44,6 +44,11 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
     let imagePrompt = openAiImageQueryResponse.data.choices[0].message
       ?.content as string;
 
+    // remove possible "Image description" prefix (case insensitive)
+    imagePrompt = imagePrompt
+      .replace(/image description/i, '')
+      .replace(':', '')
+      .trim();
     console.log('imagePrompt: ', imagePrompt);
 
     /**
@@ -79,6 +84,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
     await db
       .updateTable('articles')
       .set({
+        imagePrompt,
         imageData,
       })
       .where('id', '=', article.id)
