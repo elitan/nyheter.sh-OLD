@@ -8,7 +8,7 @@ import type { InferGetServerSidePropsType } from "next";
 export const getServerSideProps = async () => {
   const articles = await db
     .selectFrom("articles")
-    .select(["id", "createdAt", "title", "slug", "body", "imageUrl"])
+    .select(["id", "createdAt", "title", "slug", "body", "imageData"])
     .where("title", "is not", null)
     .orderBy("createdAt", "desc")
     .limit(50)
@@ -57,7 +57,7 @@ const Page = (
                 <div
                   className='h-64 border border-gray-200 rounded-lg'
                   style={{
-                    backgroundImage: `url(${article.imageUrl})`,
+                    backgroundImage: `url(${article.imageData})`,
                     backgroundPosition: "center",
                     backgroundSize: "cover",
                   }}

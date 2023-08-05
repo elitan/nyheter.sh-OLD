@@ -41,7 +41,7 @@ export default function Page(
         <div
           className='h-80 border border-gray-200 rounded-lg mb-6'
           style={{
-            backgroundImage: `url(${article.imageUrl})`,
+            backgroundImage: `url(${article.imageData})`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}

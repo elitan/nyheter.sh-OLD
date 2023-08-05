@@ -7,6 +7,7 @@
     "start": "ts-node src/1-get-sr-data.ts",
     "transcribe": "ts-node src/2-transcribe.ts",
     "openai": "ts-node src/3-openai.ts",
+    "su": "ts-node src/4-stable-diffusion.ts",
     "codegen": "kysely-codegen --dialect postgres --camel-case --out-file ./src/utils/kysely-types.d.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

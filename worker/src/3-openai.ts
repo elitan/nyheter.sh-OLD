@@ -101,8 +101,11 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
       .where('id', '=', article.id)
       .executeTakeFirst();
 
-    // get unsplash image
-    const imageQueryContent = `ARTICLE: ${body} END OF ARTICLE. Create a search query using 4 words in English for the Unsplash API for the article above. Make the two words the most relevant words for the article above. Respond only with two words and nothing else.`;
+    /**
+     * GET IMAGE PROMPT
+     */
+
+    const imageQueryContent = `ARTICLE: ${body} END OF ARTICLE. Write a  description for an image for the news article above. Make the image description short and simple. Also make the image description generic. Don't include any text in the image you're prompting. `;
 
     const openAiImageQueryResponse = await openai.createChatCompletion({
       messages: [
@@ -120,25 +123,51 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
       max_tokens: 1200,
     });
 
-    let unsplashSearchQuery = openAiImageQueryResponse.data.choices[0].message
+    let imagePrompt = openAiImageQueryResponse.data.choices[0].message
       ?.content as string;
 
-    console.log('unsplashSearchQuery: ', unsplashSearchQuery);
+    console.log('imagePrompt: ', imagePrompt);
 
-    const res = await unsplash.search.getPhotos({
-      query: unsplashSearchQuery,
+    /**
+     * GENERATE AND INSERT IMAGE
+     */
+
+    const url = 'http://192.168.1.12:7860/sdapi/v1/txt2img';
+    const headers = {
+      accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+    const suBody = JSON.stringify({
+      prompt: imagePrompt,
+      negative_prompt: 'BadDream, UnrealisticDream',
+      steps: 50,
+      cfg_scale: 5,
+      sampler_index: 'Euler a',
+      restore_faces: true,
+      width: 1200,
+      height: 800,
     });
-    const imageUrl = res.response?.results[0].urls.regular;
-    console.log('imageUrl: ', imageUrl);
 
-    await db
-      .updateTable('articles')
-      .set({
-        imageUrl,
-      })
-      .where('id', '=', article.id)
-      .execute();
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: suBody,
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+
+    // await db
+    //   .updateTable('articles')
+    //   .set({
+    //     imageUrl,
+    //   })
+    //   .where('id', '=', article.id)
+    //   .execute();
   }
+
   console.log('done');
+
   process.exit(0);
 })();
