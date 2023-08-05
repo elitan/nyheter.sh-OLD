@@ -9,8 +9,6 @@ interface IParams extends ParsedUrlQuery {
 export async function getServerSideProps({ params }: { params: IParams }) {
   const { slug } = params;
 
-  console.log({ slug });
-
   const article = await db
     .selectFrom("articles")
     .selectAll()

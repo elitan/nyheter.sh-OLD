@@ -23,7 +23,9 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
      * GET IMAGE PROMPT
      */
 
-    const imageQueryContent = `ARTICLE:\n ${article.title}\n${article.body}\nEND OF ARTICLE.\n\nWrite a  description for an image for the news article above. Make the image description short and simple. Also make the image description generic. Don't include any text in the image you're prompting. Please include references to Sweden if you're able to.`;
+    const imageQueryContent = `ARTICLE:\n ${article.title}\n${article.body}\nEND OF ARTICLE.\n\nWrite an image description that visually represents the main theme of the news article above. The image description should be simple and generic, without text, and should incorporate elements related to Sweden if relevant to the article's content.`;
+
+    // Write a  description for an image for the news article above. Make the image description short and simple. Also make the image description generic. Don't include any text in the image you're prompting. Please include references to Sweden if you're able to.`;
 
     const openAiImageQueryResponse = await openai.createChatCompletion({
       messages: [
@@ -64,7 +66,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
       prompt: imagePrompt,
       negative_prompt: 'BadDream, UnrealisticDream',
       steps: 50,
-      cfg_scale: 5,
+      cfg_scale: 6,
       sampler_index: 'Euler a',
       restore_faces: true,
       width: 1200,

@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { sv } from "date-fns/locale";
 
 import type { InferGetServerSidePropsType } from "next";
+import { twMerge } from "tailwind-merge";
 
 export const getServerSideProps = async () => {
   const articles = await db
@@ -13,8 +14,6 @@ export const getServerSideProps = async () => {
     .orderBy("createdAt", "desc")
     .limit(50)
     .execute();
-
-  console.log(articles);
 
   return {
     props: {
@@ -27,12 +26,12 @@ const Page = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   return (
-    <main className='max-w-6xl mx-auto '>
+    <main className='max-w-4xl mx-auto '>
       <div className='text-center py-12 text-2xl uppercase'>
         Swedish news in English
       </div>
       <div className='grid grid-cols-2 gap-8'>
-        {props.articles.map((article) => {
+        {props.articles.map((article, i) => {
           if (
             !article.title ||
             !article.body ||
@@ -48,14 +47,24 @@ const Page = (
 
           const summary = getFirstTwoSentences(article.body);
 
+          const mainContainerClasses = twMerge(
+            `flex my-4 space-x-4`,
+            i < 2 && `col-span-2`
+          );
+
+          const imageContainerClasses = twMerge(
+            `border border-gray-200 rounded-lg h-56`,
+            i < 2 && `h-96`
+          );
+
           return (
-            <div key={article.id} className='flex my-4 space-x-4'>
+            <div key={article.id} className={mainContainerClasses}>
               <a
                 className='w-full hover:bg-slate-50 rounded-lg p-1'
                 href={`/nyheter/${article.slug}`}
               >
                 <div
-                  className='h-64 border border-gray-200 rounded-lg'
+                  className={imageContainerClasses}
                   style={{
                     backgroundImage: `url(${article.imageData})`,
                     backgroundPosition: "center",
@@ -66,7 +75,9 @@ const Page = (
                   <h1 className='w-full text-xl mb-1 prose-h1:'>
                     {article.title}
                   </h1>
-                  <p className='text-gray-700 line-clamp-2 prose'>{summary}</p>
+                  <p className='text-gray-700 line-clamp-2 prose-lg'>
+                    {summary}
+                  </p>
                   <div className='flex justify-between mt-2 items-baseline'>
                     <div className='flex items-center space-x-1 mt-2 font-semibold text-gray-800'>
                       <div>Read more</div>
