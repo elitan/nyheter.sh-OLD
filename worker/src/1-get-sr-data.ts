@@ -7,7 +7,13 @@ import { format, parseISO } from 'date-fns';
 const url = 'https://sverigesradio.se/ekot/textarkiv'; // Replace this with the URL you want to fetch
 const baseUrl = 'https://sverigesradio.se';
 
-const ALLOWED_TAGS = ['inrikes', 'svensk politik', 'Nationell säkerhet'];
+const ALLOWED_TAGS = [
+  'inrikes',
+  'svensk politik',
+  'Nationell säkerhet',
+  'väder',
+  'IT & internet',
+];
 
 (async () => {
   const response = await axios.get(url);
