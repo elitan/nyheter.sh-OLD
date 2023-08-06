@@ -71,8 +71,8 @@ export default function Page(
       <article className='py-24'>
         <div className='mb-6'>
           <img
-            src={article.imageUrl}
-            alt={article.title}
+            src={article.imageUrl ?? ""}
+            alt={article.title ?? ""}
             className='h-80 w-full border border-gray-200 rounded-lg'
             style={{
               display: "block",
