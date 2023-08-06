@@ -12,7 +12,7 @@ const ALLOWED_TAGS = [
   'svensk politik',
   'Nationell säkerhet',
   'väder',
-  'IT & internet',
+  'it & internet',
 ];
 
 (async () => {
@@ -51,6 +51,7 @@ const ALLOWED_TAGS = [
       ALLOWED_TAGS.includes(tag.toLocaleLowerCase()),
     );
 
+    console.log(tags);
     if (!articleHasAllowedTag) {
       console.log('No allowed tag found, skipping');
       continue;
