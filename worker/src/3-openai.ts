@@ -33,7 +33,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
     // body
     const bodyContent = `INFORMATION: ${removeLastSentence(
       article.transcribedText!,
-    )} END OF INFORMATION. Write a short, informative and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. No more information will be provided. Don't write that no more information will be provided. Write in English.`;
+    )} END OF INFORMATION. Write a short, informative and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. Don't write that the article you're writing is fictional. No more information will be provided. Don't write that no more information will be provided. Write in English.`;
 
     const openAiBodyResponse = await openai.createChatCompletion({
       messages: [
