@@ -2,7 +2,6 @@ import { db } from './utils/db';
 import 'dotenv/config';
 import { openai } from './utils/openai';
 import slugify from 'slugify';
-import { createApi } from 'unsplash-js';
 
 /**
  * Removes the last sentence from a string.
