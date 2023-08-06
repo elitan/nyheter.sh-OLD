@@ -9,6 +9,6 @@ CREATE TABLE articles(
   transcribed_text text,
   image_url text,
   image_prompt text,
-  image_data text
+  audio_summary_url text
 );
 

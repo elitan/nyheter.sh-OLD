@@ -1,10 +1,19 @@
 import { db } from './utils/db';
 import 'dotenv/config';
 import { openai } from './utils/openai';
-import slugify from 'slugify';
-import { createApi } from 'unsplash-js';
+import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
+import { v4 as uuidv4 } from 'uuid';
 
 const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
+
+const s3Client = new S3({
+  endpoint: 'https://ams3.digitaloceanspaces.com',
+  region: 'us-east-1',
+  credentials: {
+    accessKeyId: process.env.SPACES_KEY as string,
+    secretAccessKey: process.env.SPACES_SECRET as string,
+  },
+});
 
 (async () => {
   const articlesToRefine = await db
@@ -12,8 +21,8 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
     .select(['id', 'title', 'body'])
     .where('title', 'is not', null)
     .where('body', 'is not', null)
-    .where('imageData', 'is', null)
-    .orderBy('id', 'asc')
+    .where('imageUrl', 'is', null)
+    .orderBy('id', 'desc')
     .execute();
 
   for (const article of articlesToRefine) {
@@ -23,9 +32,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
      * GET IMAGE PROMPT
      */
 
-    const imageQueryContent = `ARTICLE:\n ${article.title}\n${article.body}\nEND OF ARTICLE.\n\nWrite an image description that visually represents the main theme of the news article above. The image description should be simple and generic, without text, and should incorporate elements related to Sweden if relevant to the article's content.`;
-
-    // Write a  description for an image for the news article above. Make the image description short and simple. Also make the image description generic. Don't include any text in the image you're prompting. Please include references to Sweden if you're able to.`;
+    const imageQueryContent = `ARTICLE:\n ${article.title}\n${article.body}\nEND OF ARTICLE.\n\nWrite an image description that visually represents the main theme of the news article above. The image description should be simple and generic, without text, and should incorporate elements related to Sweden if relevant to the article's content. Be specific describing the image, instead of what it represent.`;
 
     const openAiImageQueryResponse = await openai.createChatCompletion({
       messages: [
@@ -39,7 +46,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
         },
       ],
       model: 'gpt-3.5-turbo',
-      temperature: 0.5,
+      temperature: 0.7,
       max_tokens: 1200,
     });
 
@@ -57,7 +64,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
      * GENERATE AND INSERT IMAGE
      */
 
-    const url = 'http://192.168.1.12:7860/sdapi/v1/txt2img';
+    const url = 'http://100.101.51.53:7860/sdapi/v1/txt2img';
     const headers = {
       accept: 'application/json',
       'Content-Type': 'application/json',
@@ -81,13 +88,34 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
 
     const data = await response.json();
 
-    const imageData = `data:image/png;base64,${data.images[0]}`;
+    console.log('data from SU:');
+    console.log(data);
+
+    // base64 encoded image data
+    const imageData = `${data.images[0]}`;
+
+    // generate unique filename
+    const fileName = `images/${article.id}-main.png`;
+
+    const base64Data = Buffer.from(imageData, 'base64');
+
+    // upload image to spaces
+    const params = {
+      Bucket: 'nyheter',
+      Key: fileName,
+      Body: base64Data,
+      ContentEncoding: 'base64', // required
+      ContentType: 'image/png', // required
+      ACL: 'public-read',
+    };
+
+    await s3Client.send(new PutObjectCommand(params));
 
     await db
       .updateTable('articles')
       .set({
         imagePrompt,
-        imageData,
+        imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`,
       })
       .where('id', '=', article.id)
       .execute();

@@ -16,7 +16,8 @@ export interface Articles {
   sverigesRadioLink: string;
   transcribedText: string | null;
   imageUrl: string | null;
-  imageData: string | null;
+  imagePrompt: string | null;
+  audioSummaryUrl: string | null;
 }
 
 export interface DB {

@@ -16,10 +16,6 @@ function removeLastSentence(str: string) {
   return str;
 }
 
-const unsplash = createApi({
-  accessKey: process.env.UNSPLASH_ACCESS_KEY as string,
-});
-
 const GPT_PROMPT_JOURNALIST = `You are a journalist who writes independent news articles. The news articles you write follow journalistic standards and are informative and engaging for the reader.`;
 const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
 
@@ -38,7 +34,7 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
     // body
     const bodyContent = `INFORMATION: ${removeLastSentence(
       article.transcribedText!,
-    )} END OF INFORMATION. Write a short, informative and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Write in english.`;
+    )} END OF INFORMATION. Write a short, informative and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. No more information will be provided. Don't write that no more information will be provided. Write in English.`;
 
     const openAiBodyResponse = await openai.createChatCompletion({
       messages: [
@@ -100,71 +96,6 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
       })
       .where('id', '=', article.id)
       .executeTakeFirst();
-
-    /**
-     * GET IMAGE PROMPT
-     */
-
-    const imageQueryContent = `ARTICLE: ${body} END OF ARTICLE. Write a  description for an image for the news article above. Make the image description short and simple. Also make the image description generic. Don't include any text in the image you're prompting. `;
-
-    const openAiImageQueryResponse = await openai.createChatCompletion({
-      messages: [
-        {
-          role: 'system',
-          content: GPT_PROMPT_ASSISTANT,
-        },
-        {
-          role: 'user',
-          content: imageQueryContent,
-        },
-      ],
-      model: 'gpt-3.5-turbo',
-      temperature: 0.5,
-      max_tokens: 1200,
-    });
-
-    let imagePrompt = openAiImageQueryResponse.data.choices[0].message
-      ?.content as string;
-
-    console.log('imagePrompt: ', imagePrompt);
-
-    /**
-     * GENERATE AND INSERT IMAGE
-     */
-
-    const url = 'http://192.168.1.12:7860/sdapi/v1/txt2img';
-    const headers = {
-      accept: 'application/json',
-      'Content-Type': 'application/json',
-    };
-    const suBody = JSON.stringify({
-      prompt: imagePrompt,
-      negative_prompt: 'BadDream, UnrealisticDream',
-      steps: 50,
-      cfg_scale: 5,
-      sampler_index: 'Euler a',
-      restore_faces: true,
-      width: 1200,
-      height: 800,
-    });
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: suBody,
-    });
-
-    const data = await response.json();
-
-    console.log(data);
-
-    // await db
-    //   .updateTable('articles')
-    //   .set({
-    //     imageUrl,
-    //   })
-    //   .where('id', '=', article.id)
-    //   .execute();
   }
 
   console.log('done');
