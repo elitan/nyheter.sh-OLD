@@ -64,7 +64,7 @@ const s3Client = new S3({
      * GENERATE AND INSERT IMAGE
      */
 
-    const url = 'http://100.101.51.53:7860/sdapi/v1/txt2img';
+    const url = process.env.STABLE_DIFFUSION_TEXT2IMG_ENDPOINT as string;
     const headers = {
       accept: 'application/json',
       'Content-Type': 'application/json',
