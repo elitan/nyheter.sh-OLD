@@ -26,7 +26,7 @@ const Page = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   return (
-    <main className='max-w-4xl mx-auto '>
+    <main className='max-w-4xl mx-auto px-2 '>
       <div className='text-center py-12 text-2xl uppercase'>
         Swedish news in English
       </div>
@@ -48,13 +48,13 @@ const Page = (
           const summary = getFirstTwoSentences(article.body);
 
           const mainContainerClasses = twMerge(
-            `flex my-4 space-x-4`,
+            `flex my-4 space-x-4 md:col-span-1 col-span-2`,
             i < 2 && `col-span-2`
           );
 
           const imageContainerClasses = twMerge(
             `border border-gray-200 rounded-lg h-56`,
-            i < 2 && `h-96`
+            i < 2 && `h-96 md:h-56`
           );
 
           return (
@@ -71,7 +71,7 @@ const Page = (
                     backgroundSize: "cover",
                   }}
                 />
-                <div className='p-6'>
+                <div className='py-3'>
                   <h1 className='w-full text-xl mb-1 prose-h1:'>
                     {article.title}
                   </h1>

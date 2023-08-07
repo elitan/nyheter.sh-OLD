@@ -55,6 +55,7 @@ function AudioPlayer({ audioSummaryUrl }: { audioSummaryUrl: string | null }) {
         url={audioSummaryUrl}
         controls={true}
         height={50}
+        width={`100%`}
         playing={playing}
       />
     </div>
@@ -67,7 +68,7 @@ export default function Page(
   const { article } = props;
 
   return (
-    <main className='max-w-2xl mx-auto '>
+    <main className='max-w-2xl mx-auto px-4 '>
       <article className='py-24'>
         <div className='mb-6'>
           <img
