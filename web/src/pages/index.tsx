@@ -27,8 +27,8 @@ const Page = (
 ) => {
   return (
     <main className='max-w-4xl mx-auto px-2 '>
-      <div className='text-center py-12 text-2xl uppercase'>
-        Swedish news in English
+      <div className='text-center py-12 text-2xl prose-lg'>
+        <h1>Swedish news in English</h1>
       </div>
       <div className='grid grid-cols-2 gap-8'>
         {props.articles.map((article, i) => {
