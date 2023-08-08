@@ -2,6 +2,7 @@ import React from 'react';
 import { MainContainer } from './MainContainer';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
+import Link from 'next/link';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const now = new Date();
@@ -13,7 +14,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className='bg-white'>
         <MainContainer>
           <div className='flex justify-between py-8 items-center'>
-            <div className='space-y-1'>
+            <Link className='space-y-1 block' href='/'>
               <div>
                 <h2 className='text-cyan-800 font-semibold text-xl'>
                   Nyheter.sh
@@ -22,7 +23,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <div>
                 <h1 className='text-gray-800'>Your Swedish News in English</h1>
               </div>
-            </div>
+            </Link>
             <div className='flex justify-between text-sm space-x-8'>
               <div className='flex items-center space-x-2'>
                 <div>

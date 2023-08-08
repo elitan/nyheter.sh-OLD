@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
 
 import type { InferGetServerSidePropsType } from 'next';
+import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
 export const getServerSideProps = async () => {
@@ -37,14 +38,14 @@ function HeaderIndex({
           backgroundSize: 'cover',
         }}
       >
-        <a
+        <Link
           className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
           href={`/nyheter/${articles[0].slug}`}
         >
           <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
             {articles[0].title}
           </p>
-        </a>
+        </Link>
       </div>
       <div className='grid grid-cols-1 h-full'>
         <div
@@ -54,14 +55,14 @@ function HeaderIndex({
             backgroundSize: 'cover',
           }}
         >
-          <a
+          <Link
             className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
             href={`/nyheter/${articles[1].slug}`}
           >
             <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
               {articles[1].title}
             </p>
-          </a>
+          </Link>
         </div>
         <div
           style={{
@@ -70,14 +71,14 @@ function HeaderIndex({
             backgroundSize: 'cover',
           }}
         >
-          <a
+          <Link
             className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
             href={`/nyheter/${articles[2].slug}`}
           >
             <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
               {articles[2].title}
             </p>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
@@ -124,7 +125,7 @@ const Page = (
 
           return (
             <div key={article.id} className={mainContainerClasses}>
-              <a
+              <Link
                 className='w-full hover:bg-slate-50 rounded-lg p-1'
                 href={`/nyheter/${article.slug}`}
               >
@@ -161,10 +162,10 @@ const Page = (
                         />
                       </svg>
                     </div>
-                    <div className='text-xs text-gray-400'>{formattedDate}</div>
+                    <div className='text-xs text-gray-400'>AI</div>
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
           );
         })}
