@@ -1,6 +1,6 @@
-import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
-import { type DB } from "./kysely-types";
-import { Pool } from "pg";
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import { type DB } from './kysely-types';
+import { Pool } from 'pg';
 
 export const db = new Kysely<DB>({
   dialect: new PostgresDialect({

@@ -7,6 +7,8 @@ import { format, parseISO } from 'date-fns';
 const url = 'https://sverigesradio.se/ekot/textarkiv'; // Replace this with the URL you want to fetch
 const baseUrl = 'https://sverigesradio.se';
 
+const NOT_ALLOWED_TAGS = ['utrikes'];
+
 const ALLOWED_TAGS = [
   'inrikes',
   'svensk politik',
@@ -14,6 +16,17 @@ const ALLOWED_TAGS = [
   'väder',
   'it & internet',
 ];
+
+function hasAllowedTags(tags: string[]) {
+  // sometimes SR are lazy
+  if (tags.length === 0) return true;
+
+  // first check if there are tags that will automatically make the article not allowed
+  const notAllowedTags = tags.filter((tag) => NOT_ALLOWED_TAGS.includes(tag));
+  if (notAllowedTags.length > 0) return false;
+
+  return tags.some((tag) => ALLOWED_TAGS.includes(tag));
+}
 
 (async () => {
   const response = await axios.get(url);
@@ -47,12 +60,8 @@ const ALLOWED_TAGS = [
       tags.push($(link).text()); // get the text of the link and push it to the tags array
     });
 
-    const articleHasAllowedTag = tags.some((tag) =>
-      ALLOWED_TAGS.includes(tag.toLocaleLowerCase()),
-    );
-
     console.log(tags);
-    if (!articleHasAllowedTag) {
+    if (!hasAllowedTags(tags)) {
       console.log('No allowed tag found, skipping');
       continue;
     }

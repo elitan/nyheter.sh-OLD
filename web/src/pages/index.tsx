@@ -1,17 +1,18 @@
-import { db } from "@/utils/db";
-import { getFirstTwoSentences } from "@/utils/helpers";
-import { format } from "date-fns";
-import { sv } from "date-fns/locale";
+import { MainContainer } from '@/components/MainContainer';
+import { db } from '@/utils/db';
+import { getFirstTwoSentences } from '@/utils/helpers';
+import { format } from 'date-fns';
+import { sv } from 'date-fns/locale';
 
-import type { InferGetServerSidePropsType } from "next";
-import { twMerge } from "tailwind-merge";
+import type { InferGetServerSidePropsType } from 'next';
+import { twMerge } from 'tailwind-merge';
 
 export const getServerSideProps = async () => {
   const articles = await db
-    .selectFrom("articles")
-    .select(["id", "createdAt", "title", "slug", "body", "imageUrl"])
-    .where("title", "is not", null)
-    .orderBy("createdAt", "desc")
+    .selectFrom('articles')
+    .select(['id', 'createdAt', 'title', 'slug', 'body', 'imageUrl'])
+    .where('title', 'is not', null)
+    .orderBy('createdAt', 'desc')
     .limit(50)
     .execute();
 
@@ -22,16 +23,80 @@ export const getServerSideProps = async () => {
   };
 };
 
-const Page = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) => {
+function HeaderIndex({
+  articles,
+}: {
+  articles: InferGetServerSidePropsType<typeof getServerSideProps>['articles'];
+}) {
   return (
-    <main className='max-w-4xl mx-auto px-2 '>
-      <div className='text-center py-12 text-2xl prose-lg'>
-        <h1>Swedish news in English</h1>
+    <div className='grid grid-cols-2 h-96 my-8' style={{ height: 600 }}>
+      <div
+        style={{
+          backgroundImage: `url(${articles[0].imageUrl})`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+        }}
+      >
+        <a
+          className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
+          href={`/nyheter/${articles[0].slug}`}
+        >
+          <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
+            {articles[0].title}
+          </p>
+        </a>
       </div>
+      <div className='grid grid-cols-1 h-full'>
+        <div
+          style={{
+            backgroundImage: `url(${articles[1].imageUrl})`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+          }}
+        >
+          <a
+            className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
+            href={`/nyheter/${articles[1].slug}`}
+          >
+            <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
+              {articles[1].title}
+            </p>
+          </a>
+        </div>
+        <div
+          style={{
+            backgroundImage: `url(${articles[2].imageUrl})`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+          }}
+        >
+          <a
+            className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
+            href={`/nyheter/${articles[2].slug}`}
+          >
+            <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
+              {articles[2].title}
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const Page = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
+  // get first three articles
+  const firstThreeArticles = props.articles.slice(0, 3);
+
+  const remainingArticles = props.articles.slice(3);
+
+  return (
+    <MainContainer>
+      <HeaderIndex articles={firstThreeArticles} />
       <div className='grid grid-cols-2 gap-8'>
-        {props.articles.map((article, i) => {
+        {remainingArticles.map((article, i) => {
           if (
             !article.title ||
             !article.body ||
@@ -41,7 +106,7 @@ const Page = (
             return;
           }
 
-          const formattedDate = format(article.createdAt, "yyyy-MM-dd HH:mm", {
+          const formattedDate = format(article.createdAt, 'yyyy-MM-dd HH:mm', {
             locale: sv,
           });
 
@@ -49,12 +114,12 @@ const Page = (
 
           const mainContainerClasses = twMerge(
             `flex my-4 space-x-4 md:col-span-1 col-span-2`,
-            i < 2 && `col-span-2`
+            i < 2 && `col-span-2`,
           );
 
           const imageContainerClasses = twMerge(
             `border border-gray-200 rounded-lg h-56`,
-            i < 2 && `h-96 md:h-56`
+            i < 2 && `h-96 md:h-56`,
           );
 
           return (
@@ -67,8 +132,8 @@ const Page = (
                   className={imageContainerClasses}
                   style={{
                     backgroundImage: `url(${article.imageUrl})`,
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
                   }}
                 />
                 <div className='py-3'>
@@ -104,7 +169,7 @@ const Page = (
           );
         })}
       </div>
-    </main>
+    </MainContainer>
   );
 };
 

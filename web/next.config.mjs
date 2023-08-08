@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-import { withSuperjson } from "next-superjson";
+import { withSuperjson } from 'next-superjson';
 
 const nextConfig = {
   reactStrictMode: true,
