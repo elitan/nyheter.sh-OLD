@@ -70,7 +70,7 @@ export default function Page(
 
   return (
     <div className='py-6 lg:py-24'>
-      <div className='mb-6  max-w-7xl mx-auto'>
+      <div className='mb-6  max-w-5xl mx-auto'>
         <img
           src={article.imageUrl ?? ''}
           alt={article.title ?? ''}

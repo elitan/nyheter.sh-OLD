@@ -39,7 +39,7 @@ function HeaderIndex({
         }}
       >
         <Link
-          className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
+          className='block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5'
           href={`/nyheter/${articles[0].slug}`}
         >
           <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
@@ -56,7 +56,7 @@ function HeaderIndex({
           }}
         >
           <Link
-            className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
+            className='block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5'
             href={`/nyheter/${articles[1].slug}`}
           >
             <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
@@ -72,7 +72,7 @@ function HeaderIndex({
           }}
         >
           <Link
-            className='block relative bg-gradient-to-t from-gray-900 to-70% hover:from-gray-950 w-full h-full p-5'
+            className='block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5'
             href={`/nyheter/${articles[2].slug}`}
           >
             <p className='absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl '>
@@ -126,7 +126,7 @@ const Page = (
           return (
             <div key={article.id} className={mainContainerClasses}>
               <Link
-                className='w-full hover:bg-slate-50 rounded-lg p-1'
+                className='w-full rounded-lg p-1'
                 href={`/nyheter/${article.slug}`}
               >
                 <div
@@ -162,7 +162,7 @@ const Page = (
                         />
                       </svg>
                     </div>
-                    <div className='text-xs text-gray-400'>AI</div>
+                    {/* <div className='text-xs text-gray-400'>AI</div> */}
                   </div>
                 </div>
               </Link>
