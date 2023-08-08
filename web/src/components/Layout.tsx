@@ -21,7 +21,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </h2>
               </div>
               <div>
-                <h1 className='text-gray-800'>Your Swedish News in English</h1>
+                <h1 className='text-gray-800'>Swedish News in English</h1>
               </div>
             </Link>
             <div className='flex justify-between text-sm space-x-8'>
