@@ -63,7 +63,7 @@ function HeaderIndex({
             className="block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5"
             href={`/nyheter/${articles[1].slug}`}
           >
-            <p className="absolute bottom-5 text-white text-2xl lg:text-5xl font-semibold drop-shadow-xl ">
+            <p className="absolute bottom-5 text-white text-2xl lg:text-4xl font-semibold drop-shadow-xl ">
               {articles[1].title}
             </p>
           </Link>
@@ -79,7 +79,7 @@ function HeaderIndex({
             className="block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5"
             href={`/nyheter/${articles[2].slug}`}
           >
-            <p className="absolute bottom-5 text-white text-2xl lg:text-5xl font-semibold drop-shadow-xl ">
+            <p className="absolute bottom-5 text-white text-2xl lg:text-4xl font-semibold drop-shadow-xl ">
               {articles[2].title}
             </p>
           </Link>
