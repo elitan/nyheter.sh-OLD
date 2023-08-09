@@ -95,7 +95,7 @@ export default function Page(
       <div className="mb-6  max-w-5xl mx-auto">
         <img
           src={article.imageUrl ?? ''}
-          alt={article.imagePrompt}
+          alt={article.imagePrompt ?? ''}
           className="w-full border border-gray-200 rounded-lg"
           style={{
             display: 'block',
