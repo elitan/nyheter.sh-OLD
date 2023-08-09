@@ -10,6 +10,7 @@ CREATE TABLE articles(
   image_url text,
   image_prompt text,
   audio_summary_url text,
-  is_related_to_sweden boolean
+  is_related_to_sweden boolean,
+  category text
 );
 

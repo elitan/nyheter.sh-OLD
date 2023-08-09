@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { openai } from './utils/openai';
 import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
+import { sendDiscordMessage } from './utils/discord';
 
 const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
 
@@ -18,9 +19,8 @@ const s3Client = new S3({
 (async () => {
   const articlesToRefine = await db
     .selectFrom('articles')
-    .select(['id', 'title', 'body'])
-    .where('title', 'is not', null)
-    .where('body', 'is not', null)
+    .select(['id', 'imagePrompt'])
+    .where('imagePrompt', 'is not', null)
     .where('imageUrl', 'is', null)
     .orderBy('id', 'desc')
     .execute();
@@ -28,36 +28,8 @@ const s3Client = new S3({
   for (const article of articlesToRefine) {
     console.log('article: ', article);
 
-    /**
-     * GET IMAGE PROMPT
-     */
+    const { imagePrompt } = article;
 
-    const imageQueryContent = `ARTICLE:\n ${article.title}\n${article.body}\nEND OF ARTICLE.\n\nWrite an image description that visually represents the main theme of the news article above. The image description should be simple and generic, without text, and should incorporate elements related to Sweden if relevant to the article's content. Be specific describing the image, instead of what it represent.`;
-
-    const openAiImageQueryResponse = await openai.createChatCompletion({
-      messages: [
-        {
-          role: 'system',
-          content: GPT_PROMPT_ASSISTANT,
-        },
-        {
-          role: 'user',
-          content: imageQueryContent,
-        },
-      ],
-      model: 'gpt-3.5-turbo',
-      temperature: 0.7,
-      max_tokens: 1200,
-    });
-
-    let imagePrompt = openAiImageQueryResponse.data.choices[0].message
-      ?.content as string;
-
-    // remove possible "Image description" prefix (case insensitive)
-    imagePrompt = imagePrompt
-      .replace(/image description/i, '')
-      .replace(':', '')
-      .trim();
     console.log('imagePrompt: ', imagePrompt);
 
     /**

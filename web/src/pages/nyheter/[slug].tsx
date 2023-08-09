@@ -111,13 +111,15 @@ export default function Page(
         </div>
       </div>
 
+      <div className="prose-xl max-w-6xl mx-auto text-center">
+        <h1 className="mb-6 text-gray-950">{article.title}</h1>
+      </div>
       <div className="mb-6  max-w-2xl mx-auto px-2">
         <article>
           <div>
             <AudioPlayer audioSummaryUrl={article.audioSummaryUrl} />
           </div>
-          <div className="prose">
-            <h1 className="text-3xl mb-6 text-gray-950">{article.title}</h1>
+          <div className="prose-xl">
             {article.body?.split('\n').map((paragraph, index) => {
               return <p key={index}>{paragraph}</p>;
             })}

@@ -1,4 +1,4 @@
-import type { ColumnType } from 'kysely';
+import type { ColumnType } from "kysely";
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
@@ -19,6 +19,7 @@ export interface Articles {
   imagePrompt: string | null;
   audioSummaryUrl: string | null;
   isRelatedToSweden: boolean | null;
+  category: string | null;
 }
 
 export interface DB {
