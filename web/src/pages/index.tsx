@@ -31,7 +31,10 @@ function HeaderIndex({
   articles: InferGetServerSidePropsType<typeof getServerSideProps>['articles'];
 }) {
   return (
-    <div className="grid grid-cols-2 h-96 my-8" style={{ height: 600 }}>
+    <div
+      className="grid grid-cols-1 lg:grid-cols-2 lg:h-96 my-8"
+      style={{ height: 600 }}
+    >
       <div
         style={{
           backgroundImage: `url(${articles[0].imageUrl})`,
@@ -43,7 +46,7 @@ function HeaderIndex({
           className="block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5"
           href={`/nyheter/${articles[0].slug}`}
         >
-          <p className="absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl ">
+          <p className="absolute bottom-5 text-white text-3xl lg:text-5xl font-semibold drop-shadow-xl ">
             {articles[0].title}
           </p>
         </Link>
@@ -60,7 +63,7 @@ function HeaderIndex({
             className="block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5"
             href={`/nyheter/${articles[1].slug}`}
           >
-            <p className="absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl ">
+            <p className="absolute bottom-5 text-white text-2xl lg:text-5xl font-semibold drop-shadow-xl ">
               {articles[1].title}
             </p>
           </Link>
@@ -76,7 +79,7 @@ function HeaderIndex({
             className="block relative bg-gradient-to-t from-gray-900 to-70%  w-full h-full p-5"
             href={`/nyheter/${articles[2].slug}`}
           >
-            <p className="absolute bottom-5 text-white text-5xl font-semibold drop-shadow-xl ">
+            <p className="absolute bottom-5 text-white text-2xl lg:text-5xl font-semibold drop-shadow-xl ">
               {articles[2].title}
             </p>
           </Link>
