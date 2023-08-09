@@ -18,6 +18,7 @@ export interface Articles {
   imageUrl: string | null;
   imagePrompt: string | null;
   audioSummaryUrl: string | null;
+  isRelatedToSweden: boolean | null;
 }
 
 export interface DB {

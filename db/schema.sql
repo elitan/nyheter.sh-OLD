@@ -9,6 +9,7 @@ CREATE TABLE articles(
   transcribed_text text,
   image_url text,
   image_prompt text,
-  audio_summary_url text
+  audio_summary_url text,
+  is_related_to_sweden boolean
 );
 

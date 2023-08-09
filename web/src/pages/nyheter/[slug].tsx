@@ -3,7 +3,7 @@ import { InferGetServerSidePropsType } from 'next';
 import { type ParsedUrlQuery } from 'querystring';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { MainContainer } from '@/components/MainContainer';
+import { NextSeo } from 'next-seo';
 const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 interface IParams extends ParsedUrlQuery {
@@ -48,8 +48,8 @@ function AudioPlayer({ audioSummaryUrl }: { audioSummaryUrl: string | null }) {
   }
 
   return (
-    <div className='my-4 py-4 border-b rounded-md flex items-center flex-col'>
-      <p className='text-gray-700 text-sm pb-2 text-center font-semibold'>
+    <div className="my-4 py-4 border-b rounded-md flex items-center flex-col">
+      <p className="text-gray-700 text-sm pb-2 text-center font-semibold">
         Listen to a summary
       </p>
       <ReactPlayer
@@ -69,45 +69,66 @@ export default function Page(
   const { article } = props;
 
   return (
-    <div className='py-6 lg:py-24'>
-      <div className='mb-6  max-w-5xl mx-auto'>
+    <div className="py-6 lg:py-24">
+      <NextSeo
+        title={article.title as string}
+        description={article.body?.slice(0, 255)}
+        openGraph={{
+          title: article.title as string,
+          description: article.body?.slice(0, 255),
+          images: [
+            {
+              url: article.imageUrl ?? '',
+              alt: article.title as string,
+              type: 'image/png',
+            },
+          ],
+          siteName: 'Nyheter.sh',
+        }}
+        twitter={{
+          handle: '@elitasson',
+          site: '@nyheter.sh',
+          cardType: 'summary_large_image',
+        }}
+      />
+      <div className="mb-6  max-w-5xl mx-auto">
         <img
           src={article.imageUrl ?? ''}
           alt={article.title ?? ''}
-          className='w-full border border-gray-200 rounded-lg'
+          className="w-full border border-gray-200 rounded-lg"
           style={{
             display: 'block',
             objectFit: 'cover',
             height: '450px',
           }}
         />
-        <div className='px-2'>
-          <p className='text-gray-500 text-xs mt-1'>
+        <div className="px-2">
+          <p className="text-gray-500 text-xs mt-1">
             Note: The image was generated using AI and might not fully reflect
             the news article.
           </p>
         </div>
       </div>
 
-      <div className='mb-6  max-w-2xl mx-auto px-2'>
+      <div className="mb-6  max-w-2xl mx-auto px-2">
         <article>
           <div>
             <AudioPlayer audioSummaryUrl={article.audioSummaryUrl} />
           </div>
-          <div className='prose'>
-            <h1 className='text-3xl mb-6 text-gray-950'>{article.title}</h1>
+          <div className="prose">
+            <h1 className="text-3xl mb-6 text-gray-950">{article.title}</h1>
             {article.body?.split('\n').map((paragraph, index) => {
               return <p key={index}>{paragraph}</p>;
             })}
           </div>
-          <div className='mt-3'>
-            <p className='text-gray-500 text-sm'>
+          <div className="mt-3">
+            <p className="text-gray-500 text-sm">
               This article was inspired by:{' '}
               <a
                 href={article.sverigesRadioLink}
-                className='underline hover:text-gray-700'
-                target='_blank'
-                rel='noopener noreferrer'
+                className="underline hover:text-gray-700"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {article.sverigesRadioTitle}
               </a>{' '}

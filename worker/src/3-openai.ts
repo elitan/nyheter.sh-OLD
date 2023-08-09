@@ -1,6 +1,9 @@
 import { db } from './utils/db';
-import 'dotenv/config';
-import { openai } from './utils/openai';
+import {
+  GPT_PROMPT_JOURNALIST,
+  openai,
+  textIsRelatedToSweden,
+} from './utils/openai';
 import slugify from 'slugify';
 
 /**
@@ -15,13 +18,11 @@ function removeLastSentence(str: string) {
   return str;
 }
 
-const GPT_PROMPT_JOURNALIST = `You are a journalist who writes independent news articles. The news articles you write follow journalistic standards and are informative and engaging for the reader.`;
-const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
-
 (async () => {
   const articlesToRefine = await db
     .selectFrom('articles')
     .select(['id', 'transcribedText'])
+    .where('isRelatedToSweden', 'is', null)
     .where('transcribedText', 'is not', null)
     .where('body', 'is', null)
     .orderBy('id', 'asc')
@@ -29,6 +30,24 @@ const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
 
   for (const article of articlesToRefine) {
     console.log('article: ', article);
+
+    // check if the article is related to sweden or not
+    const isRelatedToSweden = await textIsRelatedToSweden(
+      article.transcribedText as string,
+    );
+
+    await db
+      .updateTable('articles')
+      .set({
+        isRelatedToSweden,
+      })
+      .where('id', '=', article.id)
+      .execute();
+
+    if (!isRelatedToSweden) {
+      console.log(`skipping this article because it's not related to Sweden`);
+      continue;
+    }
 
     // body
     const bodyContent = `INFORMATION: ${removeLastSentence(
