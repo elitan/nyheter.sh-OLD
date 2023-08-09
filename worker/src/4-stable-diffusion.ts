@@ -72,7 +72,7 @@ const s3Client = new S3({
     const suBody = JSON.stringify({
       prompt: imagePrompt,
       negative_prompt: 'BadDream, UnrealisticDream',
-      steps: 80,
+      steps: 65,
       cfg_scale: 8,
       sampler_index: 'Euler a',
       restore_faces: true,

@@ -13,6 +13,7 @@ export const getServerSideProps = async () => {
     .selectFrom('articles')
     .select(['id', 'createdAt', 'title', 'slug', 'body', 'imageUrl'])
     .where('title', 'is not', null)
+    .where('isRelatedToSweden', '=', true)
     .orderBy('createdAt', 'desc')
     .limit(50)
     .execute();

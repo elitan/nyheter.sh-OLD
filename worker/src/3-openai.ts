@@ -23,19 +23,19 @@ function removeLastSentence(str: string) {
     .selectFrom('articles')
     .select(['id', 'transcribedText'])
     .where('isRelatedToSweden', 'is', null)
-    .where('transcribedText', 'is not', null)
-    .where('body', 'is', null)
     .orderBy('id', 'asc')
     .execute();
 
   for (const article of articlesToRefine) {
     console.log('article: ', article);
 
+    console.log('check if related to sweden');
     // check if the article is related to sweden or not
     const isRelatedToSweden = await textIsRelatedToSweden(
       article.transcribedText as string,
     );
 
+    console.log({ isRelatedToSweden });
     await db
       .updateTable('articles')
       .set({
