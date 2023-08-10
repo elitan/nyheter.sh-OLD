@@ -142,9 +142,7 @@ const Page = (
                   }}
                 />
                 <div className="py-3">
-                  <h1 className="w-full text-xl mb-1 prose-h1:">
-                    {article.title}
-                  </h1>
+                  <h1 className="w-full text-xl mb-1">{article.title}</h1>
                   <p className="text-gray-700 line-clamp-2 prose-lg">
                     {summary}
                   </p>
