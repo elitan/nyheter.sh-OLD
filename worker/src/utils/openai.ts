@@ -54,7 +54,7 @@ export async function generateArticle(transcribedText: string) {
 Help me with the following: Answer ONLY using the JSON format below. The instructions are inside the json format for you to complete. Format line breaks correctly inside the json format.
 
 {
-  "body": "Write a short, informative, and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. Don't write that the article you're writing is fictional. No more information will be provided. Don't write that no more information will be provided. Write in English"
+  "body": "Write a short, informative, and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. Don't write that the article you're writing is fictional. No more information will be provided. Don't write that no more information will be provided. Write in English. Format line breaks correctly"
   "headline": "Write a very short and engaging headline of a maximum of 8 words",
   "category": "a single category the article can be associated with",
   "imagePrompt": "description of an image to be associated with the news article. Make the description detailed"
