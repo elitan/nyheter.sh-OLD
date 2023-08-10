@@ -10,7 +10,11 @@
     "codegen": "kysely-codegen --dialect postgres --camel-case --out-file ./src/utils/kysely-types.d.ts"
   },
   "dependencies": {
+    "@feedback-fish/react": "^1.2.2",
     "@heroicons/react": "^2.0.18",
+    "@mdx-js/loader": "^2.3.0",
+    "@mdx-js/react": "^2.3.0",
+    "@next/mdx": "^13.4.13",
     "@types/node": "20.4.5",
     "@types/react": "18.2.17",
     "@types/react-dom": "18.2.7",
@@ -33,7 +37,6 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.9",
     "@types/pg": "^8.10.2",
     "prettier": "^3.0.1"
