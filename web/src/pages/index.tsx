@@ -144,7 +144,7 @@ const Page = (
                 <div className="py-3">
                   <h1 className="w-full text-xl mb-1">{article.title}</h1>
                   <p className="text-gray-700 line-clamp-2 prose-lg">
-                    {summary}
+                    🇸🇪 {summary}
                   </p>
                   <div className="flex justify-between mt-2 items-baseline">
                     <div className="flex items-center space-x-1 mt-2 font-semibold text-gray-800">
