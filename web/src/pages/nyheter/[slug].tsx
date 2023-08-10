@@ -4,6 +4,7 @@ import { type ParsedUrlQuery } from 'querystring';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { NextSeo } from 'next-seo';
+import Balancer from 'react-wrap-balancer';
 const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 interface IParams extends ParsedUrlQuery {
@@ -111,8 +112,10 @@ export default function Page(
         </div>
       </div>
 
-      <div className="prose-xl max-w-6xl mx-auto text-center">
-        <h1 className="mb-6 text-gray-950">{article.title}</h1>
+      <div className="prose-xl max-w-5xl mx-auto text-center">
+        <h1 className="mb-6 text-gray-950">
+          <Balancer>{article.title}</Balancer>
+        </h1>
       </div>
       <div className="mb-6  max-w-2xl mx-auto px-2">
         <article>
