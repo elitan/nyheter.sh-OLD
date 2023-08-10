@@ -17,12 +17,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex justify-between py-8 items-center">
             <Link className="space-y-1 block" href="/">
               <div>
-                <h2 className="text-cyan-800 font-semibold text-lg">
+                <h2 className="text-cyan-700 font-semibold text-lg">
                   Nyheter.sh
                 </h2>
               </div>
               <div>
-                <h1 className="text-gray-800 font-semibold text-2xl">
+                <h1 className="text-gray-900 font-semibold text-2xl">
                   Swedish News in English
                 </h1>
               </div>
