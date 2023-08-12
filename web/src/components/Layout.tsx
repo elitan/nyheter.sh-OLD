@@ -32,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="bg-slate-200">
         <div className="bg-white">
           <MainContainer>
-            <div className="flex flex-col md:flex-row space-y-4 text-center md:text-left justify-between py-4 items-center">
+            <div className="flex flex-col md:flex-row space-y-4 text-left justify-between py-4 items-center">
               <Link className="space-x-4 flex items-center" href="/">
                 <div>
                   <img src="/logo.png" className="h-10 w-10 " alt="Logo" />
