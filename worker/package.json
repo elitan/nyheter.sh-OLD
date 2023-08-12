@@ -23,6 +23,8 @@
     "date-fns": "^2.30.0",
     "discord.js": "^14.12.1",
     "dotenv": "^16.3.1",
+    "imagemin": "^7.0.1",
+    "imagemin-pngquant": "^9.0.2",
     "kysely": "^0.26.1",
     "kysely-codegen": "^0.10.1",
     "node-fetch": "^2.4.0",
@@ -35,6 +37,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@types/imagemin": "^8.0.1",
     "@types/node-fetch": "^2.6.4",
     "@types/pg": "^8.10.2",
     "@types/uuid": "^9.0.2"

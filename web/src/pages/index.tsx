@@ -3,7 +3,6 @@ import { db } from '@/utils/db';
 import { getFirstTwoSentences } from '@/utils/helpers';
 import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
-
 import type { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
@@ -143,7 +142,7 @@ const Page = (
                 />
                 <div className="py-3">
                   <h1 className="w-full text-xl mb-1">{article.title}</h1>
-                  <p className="text-gray-700 line-clamp-2 prose-lg">
+                  <p className="text-gray-700 line-clamp-2 prose">
                     🇸🇪 {summary}
                   </p>
                   <div className="flex justify-between mt-2 items-baseline">

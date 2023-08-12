@@ -1,11 +1,8 @@
 import { db } from './utils/db';
 import 'dotenv/config';
-import { openai } from './utils/openai';
 import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
-import { v4 as uuidv4 } from 'uuid';
-import { sendDiscordMessage } from './utils/discord';
-
-const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
+import imagemin from 'imagemin';
+import imageminPngquant from 'imagemin-pngquant';
 
 const s3Client = new S3({
   endpoint: 'https://ams3.digitaloceanspaces.com',
@@ -66,16 +63,26 @@ const s3Client = new S3({
     // base64 encoded image data
     const imageData = `${data.images[0]}`;
 
+    console.log(imageData);
+
     // generate unique filename
     const fileName = `images/${article.id}-main.png`;
 
     const base64Data = Buffer.from(imageData, 'base64');
 
+    const compressedBase64Data = await imagemin.buffer(base64Data, {
+      plugins: [
+        imageminPngquant({
+          quality: [0.6, 0.8],
+        }),
+      ],
+    });
+
     // upload image to spaces
     const params = {
       Bucket: 'nyheter',
       Key: fileName,
-      Body: base64Data,
+      Body: compressedBase64Data,
       ContentEncoding: 'base64', // required
       ContentType: 'image/png', // required
       ACL: 'public-read',

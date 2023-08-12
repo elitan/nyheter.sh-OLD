@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="bg-slate-200">
         <div className="bg-white">
           <MainContainer>
-            <div className="flex justify-between py-8 items-center">
+            <div className="flex flex-col md:flex-row space-y-4 text-center md:text-left justify-between py-8 items-center">
               <Link className="space-y-1 block" href="/">
                 <div>
                   <h2 className="text-cyan-700 font-semibold text-lg">
@@ -46,7 +46,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </h1>
                 </div>
               </Link>
-              <div className="flex justify-between text-sm space-x-8">
+              <div className="justify-between text-sm space-x-8 hidden md:flex">
                 <div className="flex items-center space-x-2">
                   <div>
                     <CalendarDaysIcon className="h-7 w-7" />
