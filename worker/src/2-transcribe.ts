@@ -47,7 +47,7 @@ function runCommand(cmd: string, timeout = 5000): Promise<string> {
         );
       } catch (error) {
         console.error(`Failed to download episode: ${error}`);
-        await db.deleteFrom('articles').where('id', '=', article.id).execute();
+        // await db.deleteFrom('articles').where('id', '=', article.id).execute();
         continue;
       }
 

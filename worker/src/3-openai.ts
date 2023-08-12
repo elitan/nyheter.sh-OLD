@@ -7,6 +7,7 @@ import slugify from 'slugify';
     .selectFrom('articles')
     .select(['id', 'transcribedText'])
     .where('isRelatedToSweden', 'is', null)
+    .where('transcribedText', 'is not', null)
     .orderBy('id', 'asc')
     .execute();
 
