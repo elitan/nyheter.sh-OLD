@@ -122,7 +122,7 @@ export default function Page(
           <div>
             <AudioPlayer audioSummaryUrl={article.audioSummaryUrl} />
           </div>
-          <div className="prose-xl">
+          <div className="prose lg:prose-xl">
             {article.body?.split('\n').map((paragraph, index) => {
               return <p key={index}>{paragraph}</p>;
             })}
