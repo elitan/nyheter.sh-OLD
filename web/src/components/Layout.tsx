@@ -12,7 +12,7 @@ function TopBanner() {
       <div>
         <p className="text-sm leading-6 text-white">
           <Link href="/about">
-            Are you our next Editor-in-Chief (Chefredaktör)?{' '}
+            Are you our next Editor-in-Chief?{' '}
             <span aria-hidden="true">&rarr;</span>
           </Link>
         </p>
@@ -70,7 +70,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   rel="noreferrer noopener"
                   className="h-8 flex items-center border rounded-md px-4 hover:bg-gray-100 transition-all duration-150 ease-out text-gray-800"
                 >
-                  Send Feedback
+                  Feedback
                 </a>
               </div>
             </div>
