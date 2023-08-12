@@ -10,10 +10,13 @@ import 'dotenv/config';
 function runCommand(cmd: string, timeout = 5000): Promise<string> {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
+      if (child) {
+        child.kill(); // Kill the child process
+      }
       reject(new Error(`Command timed out after ${timeout} ms`));
     }, timeout);
 
-    child_process.exec(cmd, (error, stdout, stderr) => {
+    const child = child_process.exec(cmd, (error, stdout, stderr) => {
       clearTimeout(timeoutId);
       if (error) {
         console.warn(error);

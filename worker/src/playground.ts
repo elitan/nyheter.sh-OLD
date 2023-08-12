@@ -1,25 +1,18 @@
-import { sendDiscordMessage } from './utils/discord';
-import { textIsRelatedToSweden } from './utils/openai';
+import { TwitterApi } from 'twitter-api-v2';
 
 (async () => {
-  // await sendDiscordMessage('test 123');
+  const twitterClient = new TwitterApi({
+    appKey: 'Ajbgb2cG9RkemlEH23FpkXCGc',
+    appSecret: 'T53db7hEvNodJUUpDHMrPzYDE0lf2xvTc0LPZNKK19FgDtPESG',
+    accessToken: '1688793325610926080-ZYLk0hyFlrbxj8ZSVChFlux7zBF4sl',
+    accessSecret: 'j4Twdkcb3Se9gTgZdc6oE3ZBrz5n5HIwijadmuV9Q8Ety',
+    // clientId: 'Wk1aWnBQZWx5c0NtT0dQQncybWk6MTpjaQ',
+    // clientSecret: 'wk4sX1-9GWIxWZk3I_YDGF9G7v1lf7Y391pJt70516y5gHlSGB',
+  });
 
-  // console.log('done');
+  const appOnlyClient = new TwitterApi(
+    'AAAAAAAAAAAAAAAAAAAAAGVwpQEAAAAAUeM6oVFLUt%2Fg9v7hhhfSuFV%2FeGs%3D0sRHBasJ6IBlASEcVSbXZA6mm5kRXEWpk4m209iaykyMxWYcBd',
+  );
 
-  const text = ` Nästan 40 000 scouter från hela världen har evakuerats från ett scoutläger i Sydkorea efter tyfånvarning.
- 2000 svenska scouter har åkt till lägret.
- En av dem är Axel Christensen som reser med Dalby Scout Corps och befinner sig på en evakueringsbuss.
- Man vill ju vara kvar på lägret. Det känns lite sorgligt. Det känns som att man lämnar någonting som inte är slutat.
- Erik Selen är projektledare för det svenska deltagandet på det internationella scoutlägret och säger att 20 av 42 svenska avdelningar nu evakuerats med bussar.
- Under 14 timmar så ska det gå en buss var 30 sekund från lägreområdet.
- Så det är ju en enorm logistisk utmaning. Men den flyter på förvånansvärt väl.
- Det är ju en försiktighetsåtgärd som lägreorganisationen vidtar för att trygga boendet.
- För Axel Christensen betyder det mycket att få åka på scoutläger.
- Möta andra kulturer, se olika saker. Att få träffa nya människor. Att byta marken och sånt kul. Det betyder liksom scouting.
- Emilia Berggrens-Sölin, Ekot.
-`;
-
-  const related = await textIsRelatedToSweden(text);
-
-  console.log({ related });
+  await appOnlyClient.v2.tweet('Hello, this is a test.');
 })();

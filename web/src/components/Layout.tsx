@@ -3,8 +3,7 @@ import { MainContainer } from './MainContainer';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import Link from 'next/link';
-
-import { XMarkIcon } from '@heroicons/react/20/solid';
+import { Footer } from './Footer';
 
 function TopBanner() {
   return (
@@ -34,16 +33,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="bg-white">
           <MainContainer>
             <div className="flex flex-col md:flex-row space-y-4 text-center md:text-left justify-between py-8 items-center">
-              <Link className="space-y-1 block" href="/">
+              <Link className="space-x-4 flex items-center" href="/">
                 <div>
-                  <h2 className="text-cyan-700 font-semibold text-lg">
-                    Nyheter.sh
-                  </h2>
+                  <img src="/logo.png" className="h-10 w-10 " alt="Logo" />
                 </div>
                 <div>
-                  <h1 className="text-gray-900 font-semibold text-2xl">
-                    Swedish News in English
-                  </h1>
+                  <div>
+                    <h2 className="text-cyan-700 font-semibold text-lg">
+                      Nyheter.sh
+                    </h2>
+                  </div>
+                  <div>
+                    <h1 className="text-gray-900 font-semibold text-2xl">
+                      Swedish News in English
+                    </h1>
+                  </div>
                 </div>
               </Link>
               <div className="justify-between text-sm space-x-8 hidden md:flex">
@@ -76,8 +80,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </MainContainer>
         </div>
-
         {children}
+        <Footer />
       </div>
     </>
   );
