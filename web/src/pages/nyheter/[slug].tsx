@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { NextSeo } from 'next-seo';
 import Balancer from 'react-wrap-balancer';
+import Head from 'next/head';
 const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 interface IParams extends ParsedUrlQuery {
@@ -25,6 +26,7 @@ export async function getServerSideProps({ params }: { params: IParams }) {
       'imageUrl',
       'audioSummaryUrl',
       'imagePrompt',
+      'createdAt',
     ])
     .where('slug', '=', slug)
     .executeTakeFirst();
@@ -70,8 +72,35 @@ export default function Page(
 ) {
   const { article } = props;
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: article.title,
+    image: [article.imageUrl],
+    datePublished: article.createdAt,
+    dateModified: article.createdAt,
+    // author: {
+    //   '@type': 'Person',
+    //   name: 'Johan article.authorName,
+    // },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Nyheter.sh',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://nyheter.sh/logo.png',
+      },
+    },
+    description: article.body?.slice(0, 255),
+  };
+
   return (
     <div className="py-6 lg:py-24">
+      <Head>
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Head>
       <NextSeo
         title={article.title as string}
         description={article.body?.slice(0, 255)}
