@@ -11,7 +11,7 @@ function runCommand(cmd: string, timeout = 5000): Promise<string> {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       if (child) {
-        child.kill(); // Kill the child process
+        child.kill('SIGKILL'); // Force kill if still running
       }
       reject(new Error(`Command timed out after ${timeout} ms`));
     }, timeout);
