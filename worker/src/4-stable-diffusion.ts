@@ -1,6 +1,7 @@
 import { db } from './utils/db';
 import 'dotenv/config';
 import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
+import { twitterClient } from './utils/twitter';
 
 const s3Client = new S3({
   endpoint: 'https://ams3.digitaloceanspaces.com',
@@ -14,7 +15,7 @@ const s3Client = new S3({
 (async () => {
   const articlesToRefine = await db
     .selectFrom('articles')
-    .select(['id', 'imagePrompt'])
+    .select(['id', 'title', 'slug', 'imagePrompt'])
     .where('imagePrompt', 'is not', null)
     .where('imageUrl', 'is', null)
     .orderBy('id', 'desc')
@@ -88,6 +89,11 @@ const s3Client = new S3({
       })
       .where('id', '=', article.id)
       .execute();
+
+    // the image is now uploaded, let's tweet about it!
+    const { title } = article;
+    const linkToArticle = `https://nyheter.sh/nyheter/${article.slug}`;
+    await twitterClient.v2.tweet(`${title}\n\n${linkToArticle}`);
   }
 
   console.log('done');
