@@ -122,15 +122,14 @@ export default function Page(
           cardType: 'summary_large_image',
         }}
       />
-      <div className="mb-6  max-w-5xl mx-auto">
+      <div className="mb-6 max-w-5xl mx-auto">
         <img
           src={article.imageUrl ?? ''}
           alt={article.imagePrompt ?? ''}
-          className="w-full border border-gray-200 rounded-lg"
+          className="w-full border border-gray-200 rounded-lg h-48 md:h-96"
           style={{
             display: 'block',
             objectFit: 'cover',
-            height: '450px',
           }}
         />
         <div className="px-2">
@@ -141,8 +140,8 @@ export default function Page(
         </div>
       </div>
 
-      <div className="prose-xl max-w-5xl mx-auto text-center">
-        <h1 className="mb-6 text-gray-950">
+      <div className="prose md:prose-xl max-w-5xl mx-auto text-center">
+        <h1 className="mb-6 text-gray-950 font-serif">
           <Balancer>{article.title}</Balancer>
         </h1>
       </div>
@@ -151,24 +150,23 @@ export default function Page(
           <div>
             <AudioPlayer audioSummaryUrl={article.audioSummaryUrl} />
           </div>
-          <div className="prose lg:prose-xl">
+          <p className="text-gray-500 text-sm py-2 mb-4">
+            This news was first reported by:{' '}
+            <a
+              href={article.sverigesRadioLink}
+              className="underline hover:text-gray-700"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Sveriges Radio: {article.sverigesRadioTitle}
+            </a>{' '}
+          </p>
+          <div className="prose lg:prose-xl font-serif">
             {article.body?.split('\n').map((paragraph, index) => {
               return <p key={index}>{paragraph}</p>;
             })}
           </div>
-          <div className="mt-3">
-            <p className="text-gray-500 text-sm">
-              This article was inspired by:{' '}
-              <a
-                href={article.sverigesRadioLink}
-                className="underline hover:text-gray-700"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {article.sverigesRadioTitle}
-              </a>{' '}
-            </p>
-          </div>
+          <div className="mt-3"></div>
         </article>
       </div>
     </div>
