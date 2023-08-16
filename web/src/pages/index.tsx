@@ -99,7 +99,7 @@ const Page = (
     <MainContainer>
       <HeaderIndex articles={firstThreeArticles} />
       <div className="grid grid-cols-10">
-        <div className="col-span-10 lg:col-span-7 bg-gray-50 shadow-md p-4 mb-12">
+        <div className="col-span-10 lg:col-span-7 bg-gray-50 shadow-md p-4 mb-12 divide-y divide-slate-200 first:pt-0 last:pb-0">
           {remainingArticles.map((article, i) => {
             if (i !== 0 && i % 5 === 0) {
               return (
