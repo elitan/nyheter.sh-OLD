@@ -1,14 +1,27 @@
 version: "3.9"
 services:
   db:
-    image: postgres:15.3
+    image: postgres:15.2
     restart: always
     environment:
       TZ: "Europe/Stockholm"
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: nyheter
+      POSTGRES_DB: postgres
     ports:
-      - 5432:5432
+      - 9001:5432
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  web:
+    restart: always
+    build:
+      context: ../web
+    depends_on:
+      - "db"
+    env_file:
+      - .env
+    ports:
+      - 8001:3000
