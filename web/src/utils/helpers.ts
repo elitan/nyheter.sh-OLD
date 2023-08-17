@@ -16,12 +16,10 @@ export function renderAgo(date: Date) {
   if (minutes < 60) {
     return `${minutes} min`;
   } else if (minutes < 60 * 24) {
-    return `${Math.floor(minutes / 60)} tim`;
+    return `${Math.floor(minutes / 60)} h`;
   } else if (minutes < 60 * 24 * 2) {
-    return `Igår`;
+    return `Yesterday`;
   } else {
-    return format(date, 'd MMMM, HH:mm', {
-      locale: sv,
-    });
+    return format(date, 'd MMMM, HH:mm');
   }
 }

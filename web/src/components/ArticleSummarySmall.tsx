@@ -18,7 +18,6 @@ export function ArticleSummarySmall({ article }: { article: any }) {
 
   const summary = getFirstTwoSentences(article.body);
 
-  console.log(article.title);
   return (
     <div
       key={article.id}
