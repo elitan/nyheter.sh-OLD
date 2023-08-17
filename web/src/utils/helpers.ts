@@ -1,5 +1,4 @@
-import { differenceInMinutes, format } from 'date-fns';
-import { sv } from 'date-fns/locale';
+import { differenceInMinutes, sub, format } from 'date-fns';
 
 export function getFirstTwoSentences(str: string) {
   const sentences = str.split(/\.|\?|!/);
@@ -11,7 +10,8 @@ export function renderAgo(date: Date) {
   console.log(date);
   console.log('');
 
-  const minutes = differenceInMinutes(new Date(), date);
+  const dateMinus2Hours = sub(date, { hours: 2 });
+  const minutes = differenceInMinutes(new Date(), dateMinus2Hours);
 
   if (minutes < 60) {
     return `${minutes} min`;
