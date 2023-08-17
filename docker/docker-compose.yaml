@@ -13,7 +13,7 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     env_file:
-      - .env
+      - ./web/.env
 
   web:
     restart: always
@@ -22,6 +22,6 @@ services:
     depends_on:
       - "db"
     env_file:
-      - .env
+      - ./web/.env
     ports:
       - 8001:3000
