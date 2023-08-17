@@ -40,6 +40,11 @@ function runCommand(cmd: string, timeout = 5000): Promise<string> {
         `Transcribing article id: ${article.id} (${article.sverigesRadioTitle})`,
       );
 
+      if (article.sverigesRadioTitle.startsWith('Just nu:')) {
+        console.log('starting with Just nu, skipping');
+        continue;
+      }
+
       console.log(`Downloading episode...`);
       try {
         await runCommand(
