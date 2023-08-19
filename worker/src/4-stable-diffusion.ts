@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
 import { twitterClient } from './utils/twitter';
 import { sendDiscordMessage } from './utils/discord';
+import { Transformer } from '@napi-rs/image';
 
 const s3Client = new S3({
   endpoint: 'https://ams3.digitaloceanspaces.com',
@@ -66,17 +67,18 @@ const s3Client = new S3({
     console.log(imageData);
 
     // generate unique filename
-    const fileName = `images/${article.id}-main.png`;
+    const fileName = `images/${article.id}-main.webp`;
 
-    const base64Data = Buffer.from(imageData, 'base64');
+    const rawImage = Buffer.from(imageData, 'base64');
+
+    const imageBinary = await new Transformer(rawImage).webp(75);
 
     // upload image to spaces
     const params = {
       Bucket: 'nyheter',
       Key: fileName,
-      Body: base64Data,
-      ContentEncoding: 'base64', // required
-      ContentType: 'image/png', // required
+      Body: imageBinary,
+      ContentType: 'image/webp',
       ACL: 'public-read',
     };
 
