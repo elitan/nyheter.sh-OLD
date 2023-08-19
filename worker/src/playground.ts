@@ -1,17 +1,38 @@
-import { TwitterApi } from 'twitter-api-v2';
+import 'dotenv/config';
 
 (async () => {
-  const twitterClient = new TwitterApi({
-    appKey: 'YLgX0NHNEiLxZD8NsTwnxVuT6',
-    appSecret: '1enlCFsAvbI1rI0tmMeIJCu1477tkDYgIi11oUPQvBSYiNEZ7G',
-    accessToken: '1688793325610926080-KsOnQGX0THjFmtXSlsZcoJ3cv747Ws',
-    accessSecret: 'qkIHLYPcZAq9FqJp8NCVCfbDJAghTeFpIChZxvJS5l9Ez',
+  const imagePrompt =
+    'funny cartoon on a mountain with a glowing sun in the background';
 
-    // clientId: 'Wk1aWnBQZWx5c0NtT0dQQncybWk6MTpjaQ',
-    // clientSecret: 'wk4sX1-9GWIxWZk3I_YDGF9G7v1lf7Y391pJt70516y5gHlSGB',
+  const url = process.env.STABLE_DIFFUSION_TEXT2IMG_ENDPOINT as string;
+  const headers = {
+    accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  const suBody = JSON.stringify({
+    prompt: imagePrompt,
+    negative_prompt: 'BadDream, UnrealisticDream',
+    steps: 65,
+    cfg_scale: 8,
+    sampler_index: 'Euler a',
+    restore_faces: true,
+    width: 1200,
+    height: 800,
   });
 
-  await twitterClient.v2.tweet(
-    `NATO's Major Reorganization: Sweden's Position Uncertain\n\nhttps://www.nyheter.sh/nyheter/natos-major-reorganization-swedens-position-uncertain`,
-  );
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: suBody,
+  });
+
+  const data = await response.json();
+
+  console.log('data from SU:');
+  console.log(data);
+
+  // base64 encoded image data
+  const imageData = `${data.images[0]}`;
+
+  console.log(imageData);
 })();

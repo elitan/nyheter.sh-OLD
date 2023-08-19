@@ -2,6 +2,7 @@ import { db } from './utils/db';
 import 'dotenv/config';
 import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
 import { twitterClient } from './utils/twitter';
+import { sendDiscordMessage } from './utils/discord';
 
 const s3Client = new S3({
   endpoint: 'https://ams3.digitaloceanspaces.com',
@@ -94,6 +95,8 @@ const s3Client = new S3({
     const { title } = article;
     const linkToArticle = `https://nyheter.sh/nyheter/${article.slug}`;
     await twitterClient.v2.tweet(`${title}\n\n${linkToArticle}`);
+
+    await sendDiscordMessage(`${title}\n\n${linkToArticle}`);
   }
 
   console.log('done');
