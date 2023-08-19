@@ -5,4 +5,5 @@ export interface Article {
   slug: string | null;
   body: string | null;
   imageUrl: string | null;
+  category: string | null;
 }

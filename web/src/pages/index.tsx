@@ -9,7 +9,15 @@ import Link from 'next/link';
 export const getServerSideProps = async () => {
   const articles = await db
     .selectFrom('articles')
-    .select(['id', 'createdAt', 'title', 'slug', 'body', 'imageUrl'])
+    .select([
+      'id',
+      'createdAt',
+      'title',
+      'slug',
+      'body',
+      'imageUrl',
+      'category',
+    ])
     .where('title', 'is not', null)
     .where('isRelatedToSweden', '=', true)
     .orderBy('createdAt', 'desc')
@@ -98,8 +106,8 @@ const Page = (
   return (
     <MainContainer>
       <HeaderIndex articles={firstThreeArticles} />
-      <div className="grid grid-cols-10">
-        <div className="col-span-10 lg:col-span-7 bg-gray-50 shadow-md p-4 mb-12 divide-y divide-slate-200 first:pt-0 last:pb-0">
+      <div className="grid grid-cols-11">
+        <div className="col-span-10 lg:col-span-7 lg:col-start-3 bg-gray-50 shadow-md p-4 mb-12 divide-y divide-slate-200 first:pt-0 last:pb-0">
           {remainingArticles.map((article, i) => {
             if (i !== 0 && i % 5 === 0) {
               return (

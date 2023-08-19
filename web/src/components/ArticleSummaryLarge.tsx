@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Article } from '@/utils/types';
 
 export function ArticleSummaryLarge({ article }: { article: any }) {
-  console.log(article);
   if (!article.title || !article.body || !article.createdAt || !article.slug) {
     return;
   }
@@ -41,9 +40,18 @@ export function ArticleSummaryLarge({ article }: { article: any }) {
             {article.title}
           </h1>
           <p className="text-gray-700 line-clamp-2 font-serif">{summary}</p>
-          <p className="text-xs text-gray-500 pt-3">
-            {renderAgo(article.createdAt as Date)}
-          </p>
+          <div className="flex mr-6 mt-3 ">
+            <div>
+              <p className="text-gray-500 text-xs">
+                {renderAgo(article.createdAt as Date)}
+              </p>
+            </div>
+
+            <div className="mx-2 text-xs">·</div>
+            <div>
+              <p className="text-cyan-700 text-xs">{article.category}</p>
+            </div>
+          </div>
         </div>
         <div></div>
       </Link>

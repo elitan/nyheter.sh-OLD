@@ -6,10 +6,6 @@ export function getFirstTwoSentences(str: string) {
 }
 
 export function renderAgo(date: Date) {
-  console.log('in render ago');
-  console.log(date);
-  console.log('');
-
   const dateMinus2Hours = sub(date, { hours: 2 });
   const minutes = differenceInMinutes(new Date(), dateMinus2Hours);
 
