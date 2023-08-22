@@ -11,8 +11,6 @@ import { runCommand } from './utils/helpers';
     .where('title', 'is not', null)
     .where('body', 'is not', null)
     .where('audioUrl', 'is', null)
-    .orderBy('id', 'desc')
-    .limit(1)
     .execute();
 
   for (const article of articlesToRefine) {

@@ -25,7 +25,7 @@ export async function getServerSideProps({ params }: { params: IParams }) {
       'sverigesRadioTitle',
       'imageUrl',
       'imageIsAiGenerated',
-      'audioSummaryUrl',
+      'audioUrl',
       'imagePrompt',
       'createdAt',
     ])
@@ -46,20 +46,20 @@ export async function getServerSideProps({ params }: { params: IParams }) {
   };
 }
 
-function AudioPlayer({ audioSummaryUrl }: { audioSummaryUrl: string | null }) {
+function AudioPlayer({ audioUrl }: { audioUrl: string | null }) {
   const [playing, setPlaying] = useState(false);
 
-  if (!audioSummaryUrl) {
+  if (!audioUrl) {
     return null;
   }
 
   return (
     <div className="my-4 py-4 border-b rounded-md flex items-center flex-col">
       <p className="text-gray-700 text-sm pb-2 text-center font-semibold">
-        Listen to a summary
+        Listen to the article
       </p>
       <ReactPlayer
-        url={audioSummaryUrl}
+        url={audioUrl}
         controls={true}
         height={50}
         width={`100%`}
@@ -153,7 +153,7 @@ export default function Page(
       <div className="mb-6  max-w-2xl mx-auto px-2">
         <article>
           <div>
-            <AudioPlayer audioSummaryUrl={article.audioSummaryUrl} />
+            <AudioPlayer audioUrl={article.audioUrl} />
           </div>
           <p className="text-gray-500 text-sm py-2 lg:py-4 mb-4">
             This news was first reported by:{' '}
