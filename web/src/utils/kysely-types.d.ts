@@ -20,6 +20,7 @@ export interface Articles {
   audioSummaryUrl: string | null;
   isRelatedToSweden: boolean | null;
   category: string | null;
+  imageIsAiGenerated: Generated<boolean | null>;
 }
 
 export interface DB {
