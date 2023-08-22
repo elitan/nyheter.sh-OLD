@@ -18,7 +18,7 @@ import { runCommand } from './utils/helpers';
     console.log('article: ', article);
 
     const jsonInput = {
-      text: article.body,
+      text: 'hello world',
       output_file: '/tmp/raw.wav',
     };
 
