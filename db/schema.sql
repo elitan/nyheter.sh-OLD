@@ -10,7 +10,7 @@ CREATE TABLE articles(
   image_url text,
   image_prompt text,
   image_is_ai_generated boolean DEFAULT TRUE,
-  audio_summary_url text,
+  audio_url text,
   is_related_to_sweden boolean,
   category text
 );

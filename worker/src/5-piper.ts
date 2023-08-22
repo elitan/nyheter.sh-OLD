@@ -29,6 +29,30 @@ import { runCommand } from './utils/helpers';
       `cd /home/elitan/code/piper && cat /tmp/input.json | ./piper --model piper-voices/en/en_US/joe/medium/en_US-joe-medium.onnx --json-input`,
     );
 
+    await runCommand(
+      `ffmpeg -i /tmp/raw.wav -codec:a libmp3lame -qscale:a 2 /tmp/output.mp3`,
+    );
+
+    const audioBuffer = fs.readFileSync('/tmp/output.mp3');
+    const fileName = `audio/${article.id}.mp3`;
+
+    await put({
+      Key: fileName,
+      Body: audioBuffer,
+      ContentType: 'audio/mpeg',
+      ACL: 'public-read',
+    });
+
+    const audioSummaryUrl = `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`;
+
+    await db
+      .updateTable('articles')
+      .set({
+        audioSummaryUrl,
+      })
+      .where('id', '=', article.id)
+      .execute();
+
     // /**
     //  * UPLOAD AUDIO
     //  */
