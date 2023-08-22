@@ -21,6 +21,7 @@ import { runCommand } from './utils/helpers';
       output_file: '/tmp/raw.wav',
     };
 
+    console.log('create text-to-voice');
     fs.writeFileSync('/tmp/input.json', JSON.stringify(jsonInput));
 
     await runCommand(
@@ -28,10 +29,13 @@ import { runCommand } from './utils/helpers';
       300_000,
     );
 
+    console.log('convert wav to mp3');
     await runCommand(
       `ffmpeg -i /tmp/raw.wav -codec:a libmp3lame -qscale:a 2 /tmp/output.mp3`,
+      300_000,
     );
 
+    console.log('upload mp3');
     const audioBuffer = fs.readFileSync('/tmp/output.mp3');
     const fileName = `audio/${article.id}.mp3`;
 
@@ -44,6 +48,7 @@ import { runCommand } from './utils/helpers';
 
     const audioUrl = `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`;
 
+    console.log('update db');
     await db
       .updateTable('articles')
       .set({
