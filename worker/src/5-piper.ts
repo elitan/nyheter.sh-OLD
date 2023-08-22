@@ -22,7 +22,7 @@ import { runCommand } from './utils/helpers';
       output_file: '/tmp/raw.wav',
     };
 
-    fs.writeFileSync('/tmp/input.json', JSON.stringify(jsonInput, null, 2));
+    fs.writeFileSync('/tmp/input.json', JSON.stringify(jsonInput));
 
     await runCommand(
       `cd /home/elitan/code/piper && cat /tmp/input.json | ./piper --model piper-voices/en/en_US/joe/medium/en_US-joe-medium.onnx --json-input`,
