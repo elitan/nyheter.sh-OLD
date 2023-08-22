@@ -10,6 +10,7 @@
     "openai": "ts-node src/3-openai.ts",
     "su": "ts-node src/4-stable-diffusion.ts",
     "elevenlabs": "ts-node src/5-eleven-labs.ts",
+    "piper": "ts-node src/5-piper.ts",
     "codegen": "kysely-codegen --dialect postgres --camel-case --out-file ./src/utils/kysely-types.d.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
