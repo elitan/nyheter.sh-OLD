@@ -17,9 +17,10 @@ export interface Articles {
   transcribedText: string | null;
   imageUrl: string | null;
   imagePrompt: string | null;
-  audioSummaryUrl: string | null;
   isRelatedToSweden: boolean | null;
   category: string | null;
+  imageIsAiGenerated: Generated<boolean | null>;
+  audioUrl: string | null;
 }
 
 export interface DB {

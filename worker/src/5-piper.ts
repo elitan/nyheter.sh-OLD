@@ -10,7 +10,7 @@ import { runCommand } from './utils/helpers';
     .select(['id', 'title', 'body'])
     .where('title', 'is not', null)
     .where('body', 'is not', null)
-    .where('audioSummaryUrl', 'is', null)
+    .where('audioUrl', 'is', null)
     .orderBy('id', 'desc')
     .limit(1)
     .execute();
@@ -43,38 +43,15 @@ import { runCommand } from './utils/helpers';
       ACL: 'public-read',
     });
 
-    const audioSummaryUrl = `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`;
+    const audioUrl = `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`;
 
     await db
       .updateTable('articles')
       .set({
-        audioSummaryUrl,
+        audioUrl,
       })
       .where('id', '=', article.id)
       .execute();
-
-    // /**
-    //  * UPLOAD AUDIO
-    //  */
-    // await put({
-    //   Key: fileName,
-    //   Body: Buffer.from(audioBuffer),
-    //   ContentType: 'audio/mpeg',
-    //   ACL: 'public-read',
-    // });
-
-    // /**
-    //  * UPDATE ARTICLE
-    //  */
-    // const audioSummaryUrl = `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`;
-
-    // await db
-    //   .updateTable('articles')
-    //   .set({
-    //     audioSummaryUrl,
-    //   })
-    //   .where('id', '=', article.id)
-    //   .execute();
   }
 
   console.log('done');
