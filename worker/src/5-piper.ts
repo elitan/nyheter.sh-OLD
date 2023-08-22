@@ -25,6 +25,7 @@ import { runCommand } from './utils/helpers';
 
     await runCommand(
       `cd /home/elitan/code/piper && cat /tmp/input.json | ./piper --model piper-voices/en/en_US/joe/medium/en_US-joe-medium.onnx --json-input`,
+      300_000,
     );
 
     await runCommand(
