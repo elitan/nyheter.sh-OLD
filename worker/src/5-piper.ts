@@ -31,7 +31,7 @@ import { runCommand } from './utils/helpers';
 
     console.log('convert wav to mp3');
     await runCommand(
-      `ffmpeg -i /tmp/raw.wav -codec:a libmp3lame -qscale:a 2 /tmp/output.mp3`,
+      `ffmpeg -i /tmp/raw.wav -codec:a libmp3lame -qscale:a 2 /tmp/output.mp3 -y`,
       300_000,
     );
 
