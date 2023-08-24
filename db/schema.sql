@@ -1,6 +1,16 @@
+-- CREATE OR REPLACE FUNCTION update_updated_at_column()
+--   RETURNS TRIGGER
+--   AS $$
+-- BEGIN
+--   NEW.updated_at = NOW();
+--   RETURN NEW;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
 CREATE TABLE articles(
   id serial PRIMARY KEY,
   created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  -- updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
   title varchar(255),
   slug varchar(255),
   body text,
@@ -15,3 +25,7 @@ CREATE TABLE articles(
   category text
 );
 
+-- CREATE TRIGGER articles_update_updated_at
+--   BEFORE UPDATE ON articles
+--   FOR EACH ROW
+--   EXECUTE FUNCTION update_updated_at_column();

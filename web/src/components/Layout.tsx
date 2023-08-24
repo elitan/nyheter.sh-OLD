@@ -4,6 +4,7 @@ import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { Footer } from './Footer';
+import { UserButton } from '@clerk/nextjs';
 
 function TopBanner() {
   return (
@@ -76,6 +77,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 >
                   Feedback
                 </a>
+                <UserButton />
               </div>
             </div>
           </MainContainer>
