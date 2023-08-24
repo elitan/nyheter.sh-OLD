@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { api } from '@/utils/api';
 import { toast } from 'react-toastify';
 import { searchFlickrPhotos } from '@/server/utils/helpers';
+import { useRouter } from 'next/router';
 
 interface IParams extends ParsedUrlQuery {
   slug: string;
@@ -73,6 +74,7 @@ export default function Page(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const { article } = props;
+  const router = useRouter();
 
   const [service, setService] = useState<
     'su' | 'flickr' | 'unsplash' | 'regeringskansliet'
@@ -107,10 +109,19 @@ export default function Page(
   function handleOnImageClick(imageUrl: string) {
     console.log('handleOnImageClick', imageUrl);
 
-    updateImageMutation.mutate({
-      articleId: article.id,
-      imageUrl,
-    });
+    toast('Updating image...');
+    updateImageMutation.mutate(
+      {
+        articleId: article.id,
+        imageUrl,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Image updated');
+          router.push(`/admin/${article.slug}`);
+        },
+      },
+    );
   }
 
   const buttonBase = `rounded-md px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600 hover:border-gray-400 border border-transparent transition-all duration-150 ease-in-out`;
@@ -200,6 +211,7 @@ export default function Page(
         {imagesQuery.data?.images.map((image) => {
           return (
             <img
+              className="cursor-pointer hover:shadow-2xl"
               key={image}
               src={image}
               onClick={() => handleOnImageClick(image)}
