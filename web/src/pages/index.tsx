@@ -21,7 +21,7 @@ export const getServerSideProps = async () => {
     .where('title', 'is not', null)
     .where('isRelatedToSweden', '=', true)
     .orderBy('createdAt', 'desc')
-    .limit(45)
+    .limit(25)
     .execute();
 
   return {
