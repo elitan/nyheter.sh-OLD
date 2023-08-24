@@ -36,7 +36,7 @@ export function ArticleSummaryLarge({ article }: { article: any }) {
         />
 
         <div className="py-3">
-          <h1 className="w-full text-4xl mb-1 font-semibold font-serif">
+          <h1 className="w-full text-3xl lg:text-4xl mb-1 font-semibold font-serif">
             {article.title}
           </h1>
           <p className="text-gray-700 line-clamp-2 font-serif">{summary}</p>
