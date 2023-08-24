@@ -103,9 +103,14 @@ export default function Page(
   }
 
   return (
-    <MainContainer className="py-12">
+    <MainContainer className="py-2">
+      <div>
+        <div className="my-2">
+          <Link href={`/admin`}>← Go back</Link>
+        </div>
+      </div>
       <form onSubmit={handleSubmit}>
-        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-full">
             <label
               htmlFor="username"

@@ -147,6 +147,9 @@ export default function Page(
 
   return (
     <div className="py-4 px-4">
+      <div className="my-2">
+        <Link href={`/admin/${article.slug}`}>← Go back</Link>
+      </div>
       <div className="flex space-x-4 items-center">
         <div>
           <img src={article.imageUrl} className="h-32" />
