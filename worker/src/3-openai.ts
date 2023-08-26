@@ -31,6 +31,7 @@ import slugify from 'slugify';
       .updateTable('articles')
       .set({
         isRelatedToSweden,
+        isPublished: true,
       })
       .where('id', '=', article.id)
       .execute();
