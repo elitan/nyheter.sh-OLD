@@ -69,7 +69,7 @@ import {
   SignedOutAuthObject,
 } from '@clerk/nextjs/server';
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
+export const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape }) {
     return shape;

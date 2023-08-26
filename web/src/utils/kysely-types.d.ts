@@ -21,6 +21,9 @@ export interface Articles {
   category: string | null;
   imageIsAiGenerated: Generated<boolean | null>;
   audioUrl: string | null;
+  updatedAt: Generated<Timestamp | null>;
+  isPublished: Generated<boolean | null>;
+  isPublishedOnSocialMedia: Generated<boolean | null>;
 }
 
 export interface DB {

@@ -1,8 +1,5 @@
 import dynamic from 'next/dynamic';
 import { MainContainer } from '@/components/MainContainer';
-import { db } from '@/utils/db';
-import { InferGetServerSidePropsType } from 'next';
-import { ParsedUrlQuery } from 'querystring';
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 });
@@ -12,71 +9,84 @@ import { z } from 'zod';
 import Link from 'next/link';
 import { api } from '@/utils/api';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import { articleSchema } from '@/utils/types';
+import Trpc from '@/pages/api/trpc/[trpc]';
+import { initTRPC } from '@trpc/server';
 
-interface IParams extends ParsedUrlQuery {
-  slug: string;
-}
+export default function Page() {
+  const router = useRouter();
 
-const articleSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  body: z.string(),
-  slug: z.string(),
-  sverigesRadioLink: z.string(),
-  sverigesRadioTitle: z.string(),
-  imageUrl: z.string(),
-  imageIsAiGenerated: z.boolean(),
-  audioUrl: z.string(),
-  imagePrompt: z.string(),
-  createdAt: z.date(),
-});
+  const { slug } = router.query as { slug: string };
 
-export async function getServerSideProps({ params }: { params: IParams }) {
-  const { slug } = params;
+  const articleQuery = api.articles.getOne.useQuery(
+    {
+      slug,
+    },
+    {
+      enabled: !!slug,
+    },
+  );
 
-  const article = await db
-    .selectFrom('articles')
-    .select([
-      'id',
-      'title',
-      'body',
-      'slug',
-      'sverigesRadioLink',
-      'sverigesRadioTitle',
-      'imageUrl',
-      'imageIsAiGenerated',
-      'audioUrl',
-      'imagePrompt',
-      'createdAt',
-    ])
-    .where('slug', '=', slug)
-    .where('isRelatedToSweden', '=', true)
-    .executeTakeFirst();
-
-  const parsedArticle = articleSchema.safeParse(article);
-
-  if (!parsedArticle.success) {
-    return {
-      notFound: true,
-    };
+  if (articleQuery.isLoading) {
+    return <div>Loading...</div>;
   }
 
-  return {
-    props: {
-      article: parsedArticle.data,
-    },
-  };
+  if (articleQuery.isError) {
+    return <div>Error</div>;
+  }
+
+  console.log(articleQuery.data.article);
+
+  const article = articleSchema.parse(articleQuery.data.article);
+
+  return <ArticleEdit article={article} />;
 }
 
-export default function Page(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
-  const { article } = props;
+function ArticleEdit({ article }: { article: z.infer<typeof articleSchema> }) {
+  console.log(article);
 
   const [title, setTitle] = useState(article.title);
   const [body, setBody] = useState(article.body);
 
+  const apiContext = api.useContext();
   const updateMutation = api.articles.update.useMutation();
+  const setIsPublishedMutation = api.articles.setIsPublished.useMutation();
+  const publishOnSocialMediaMutation =
+    api.articles.publishOnSocialMedia.useMutation();
+
+  function handleTogglePublished() {
+    setIsPublishedMutation.mutate(
+      {
+        id: article.id,
+        isPublished: !article.isPublished,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Saved');
+          apiContext.articles.invalidate();
+        },
+      },
+    );
+  }
+
+  function handlePublishOnSocialMedia() {
+    publishOnSocialMediaMutation.mutate(
+      {
+        id: article.id,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Published on social media!');
+          apiContext.articles.invalidate();
+        },
+        onError: (error) => {
+          console.error({ error });
+          toast.error(error.message);
+        },
+      },
+    );
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -159,6 +169,29 @@ export default function Page(
           <ReactMarkdown>{body as string}</ReactMarkdown>
         </div> */}
         </div>
+
+        {!article.isPublishedOnSocialMedia && (
+          <div>
+            <button
+              type="button"
+              className="rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+              onClick={handlePublishOnSocialMedia}
+            >
+              Publish on social media (X (Twitter) and Linkedin)
+            </button>
+          </div>
+        )}
+
+        <div>
+          <button
+            type="button"
+            className="rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+            onClick={handleTogglePublished}
+          >
+            {article.isPublished ? 'Unpublish article' : 'Publish article'}
+          </button>
+        </div>
+
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <Link
             type="button"

@@ -53,9 +53,6 @@ dependencies:
   ts-node:
     specifier: ^10.9.1
     version: 10.9.1(@types/node@20.4.2)(typescript@5.1.6)
-  twitter-api-v2:
-    specifier: ^1.15.1
-    version: 1.15.1
   typescript:
     specifier: ^5.1.6
     version: 5.1.6
@@ -3214,10 +3211,6 @@ packages:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
     dependencies:
       safe-buffer: 5.2.1
-    dev: false
-
-  /twitter-api-v2@1.15.1:
-    resolution: {integrity: sha512-KNxoJL+sldWMI3AooPGcNkbP8awQai93d9xxsTurVPuUo/qnOUR3iO0XZTGC5sezdejHHqNyTwBAgGGw948MDg==}
     dev: false
 
   /type-fest@0.11.0:

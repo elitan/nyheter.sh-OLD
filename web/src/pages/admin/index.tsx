@@ -39,9 +39,10 @@ export default function Page(
             <Link
               href={`/admin/${article.slug}`}
               key={article.id}
-              className="block hover:bg-slate-50 p-1"
+              className="hover:bg-slate-50 p-1 flex space-x-4"
             >
-              {article.title}
+              <img src={article.imageUrl} className="h-16" />
+              <div>{article.title}</div>
             </Link>
           );
         })}
