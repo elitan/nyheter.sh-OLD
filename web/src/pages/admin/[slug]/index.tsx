@@ -129,7 +129,7 @@ function ArticleEdit({ article }: { article: z.infer<typeof articleSchema> }) {
             <div className="mt-2">
               <div className="mt-2">
                 <img
-                  src={article.imageUrl}
+                  src={article.imageUrl ?? ''}
                   className="max-h-96"
                   alt={article.imagePrompt}
                 />
