@@ -132,13 +132,18 @@ export async function put(params: any) {
   return await s3Client.send(new PutObjectCommand(params));
 }
 
-export async function postToFacebook(post: string): Promise<void> {
+export async function postToFacebook(
+  post: string,
+  link: string,
+): Promise<void> {
   console.log('post on fb');
   console.log(process.env.FACEBOOK_ACCESS_TOKEN);
 
   const url = `https://graph.facebook.com/v17.0/nyheter.sh/feed?message=${encodeURIComponent(
     post,
-  )}&access_token=${process.env.FACEBOOK_ACCESS_TOKEN}`;
+  )}&link=${encodeURIComponent(link)}&access_token=${
+    process.env.FACEBOOK_ACCESS_TOKEN
+  }`;
 
   try {
     const response = await fetch(url, {

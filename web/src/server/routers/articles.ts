@@ -108,7 +108,7 @@ export const articlesRouter = createTRPCRouter({
       //   console.error('Error posting to Twitter:', error);
       //   throw error;
       // }
-      await postToFacebook(post);
+      await postToFacebook(title as string, linkToArticle);
 
       await db
         .updateTable('articles')
