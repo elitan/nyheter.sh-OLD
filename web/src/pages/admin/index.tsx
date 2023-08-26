@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { MainContainer } from '@/components/MainContainer';
 import { db } from '@/utils/db';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import {
   getFirstTwoSentences,
@@ -9,16 +9,13 @@ import {
   renderAgo,
 } from '@/utils/helpers';
 import { AdminMenu } from '@/components/AdminMenu';
-import { auth } from '@clerk/nextjs';
 import { getAuth } from '@clerk/nextjs/server';
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { userId }: { userId: string | null } = getAuth(ctx.req);
 
   if (!userId || !isAllowedAdminUserId(userId)) {
-    return {
-      notFound: true,
-    };
+    throw new Error('Unauthorized');
   }
 
   console.log(userId);
@@ -61,6 +58,16 @@ export default function Page(
           className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl my-4"
         >
           {props.articles.map((article) => {
+            if (
+              !article.title ||
+              !article.body ||
+              !article.createdAt ||
+              !article.slug ||
+              !article.imageUrl
+            ) {
+              return;
+            }
+
             const summary = getFirstTwoSentences(article.body);
 
             return (
