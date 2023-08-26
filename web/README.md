@@ -1,5 +1,7 @@
 # Nyheter.sh Website
 
+https://developers.facebook.com/tools/debug/
+
 ## AI News Articles
 
 - [AI är här för att stanna](https://www.journalisten.se/ledare/ai-ar-har-att-stanna) - AI-teknik underlättar och förändrar journalisternas arbete, men teknikens förbättring är avgörande för effektivitet. Journalister står inför utmaningar med AI och upphovsrätt, samtidigt som brist på journalistisk kompetens uppstår i mediebranschen.
