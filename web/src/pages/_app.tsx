@@ -16,6 +16,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       customDomain="https://analytics.eliasson.me"
       selfHosted={true}
       enabled={true}
+      exclude="/admin/*"
     >
       <ClerkProvider
         appearance={{
