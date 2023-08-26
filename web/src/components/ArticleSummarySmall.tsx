@@ -46,7 +46,7 @@ export function ArticleSummarySmall({ article }: { article: any }) {
         </div>
         <div>
           <div
-            className={`border border-gray-200 rounded-md w-28 h-28 md:w-36 md:h-36`}
+            className={`border border-gray-200 rounded-md w-[90px] h-[90px] md:w-36 md:h-36`}
             style={{
               backgroundImage: `url(${article.imageUrl})`,
               backgroundPosition: 'center',
