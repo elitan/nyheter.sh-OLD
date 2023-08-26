@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { NextSeo } from 'next-seo';
 import Balancer from 'react-wrap-balancer';
 import Head from 'next/head';
+import { useUser } from '@clerk/nextjs';
+import Link from 'next/link';
 const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 interface IParams extends ParsedUrlQuery {
@@ -21,6 +23,7 @@ export async function getServerSideProps({ params }: { params: IParams }) {
       'id',
       'title',
       'body',
+      'slug',
       'sverigesRadioLink',
       'sverigesRadioTitle',
       'imageUrl',
@@ -74,6 +77,8 @@ export default function Page(
 ) {
   const { article } = props;
 
+  const { isSignedIn, user, isLoaded } = useUser();
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
@@ -125,6 +130,13 @@ export default function Page(
         }}
       />
       <div>
+        <div className="mx-auto md:w-[750px]">
+          {isSignedIn && (
+            <div>
+              <Link href={`/admin/${article.slug}`}>Edit this article</Link>
+            </div>
+          )}
+        </div>
         <div className="mx-auto lg:h-[400px] md:w-[750px]">
           <img
             src={article.imageUrl ?? ''}

@@ -112,9 +112,12 @@ function ArticleEdit({ article }: { article: z.infer<typeof articleSchema> }) {
 
   return (
     <MainContainer className="py-2">
-      <div>
-        <div className="my-2">
-          <Link href={`/admin`}>← Go back</Link>
+      <div className="flex space-x-12 item py-2">
+        <div>
+          <Link href={`/admin`}>← Go back to admin</Link>
+        </div>
+        <div>
+          <Link href={`/nyheter/${article.slug}`}>Go to article →</Link>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
