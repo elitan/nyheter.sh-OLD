@@ -12,7 +12,6 @@ import { z } from 'zod';
 import Link from 'next/link';
 import { api } from '@/utils/api';
 import { toast } from 'react-toastify';
-import { searchFlickrPhotos } from '@/server/utils/helpers';
 import { useRouter } from 'next/router';
 
 interface IParams extends ParsedUrlQuery {
@@ -26,7 +25,7 @@ const articleSchema = z.object({
   slug: z.string(),
   sverigesRadioLink: z.string(),
   sverigesRadioTitle: z.string(),
-  imageUrl: z.string(),
+  imageUrl: z.string().nullable(),
   imageIsAiGenerated: z.boolean(),
   audioUrl: z.string(),
   imagePrompt: z.string(),

@@ -17,7 +17,7 @@ export const articleSchema = z.object({
   slug: z.string(),
   sverigesRadioLink: z.string(),
   sverigesRadioTitle: z.string(),
-  imageUrl: z.string(),
+  imageUrl: z.string().nullable(),
   imageIsAiGenerated: z.boolean(),
   audioUrl: z.string(),
   imagePrompt: z.string(),

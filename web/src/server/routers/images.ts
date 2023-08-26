@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { Transformer } from '@napi-rs/image';
 import { createTRPCRouter, protectedProcedure } from '@/server/trpc';
@@ -89,7 +90,7 @@ export const imagesRouter = createTRPCRouter({
       console.log('transform image');
       const imageBinary = await new Transformer(rawImage).webp(75);
 
-      const fileName = `images/${articleId}-main.webp`;
+      const fileName = `images/${articleId}-${uuidv4()}.webp`;
 
       console.log('uploading image...');
 

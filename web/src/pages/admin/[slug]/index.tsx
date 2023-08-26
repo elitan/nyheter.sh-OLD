@@ -11,8 +11,6 @@ import { api } from '@/utils/api';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { articleSchema } from '@/utils/types';
-import Trpc from '@/pages/api/trpc/[trpc]';
-import { initTRPC } from '@trpc/server';
 
 export default function Page() {
   const router = useRouter();
