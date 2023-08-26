@@ -1,12 +1,28 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { MainContainer } from '@/components/MainContainer';
 import { db } from '@/utils/db';
-import { InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { getFirstTwoSentences, renderAgo } from '@/utils/helpers';
+import {
+  getFirstTwoSentences,
+  isAllowedAdminUserId,
+  renderAgo,
+} from '@/utils/helpers';
 import { AdminMenu } from '@/components/AdminMenu';
+import { auth } from '@clerk/nextjs';
+import { getAuth } from '@clerk/nextjs/server';
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { userId }: { userId: string | null } = getAuth(ctx.req);
+
+  if (!userId || !isAllowedAdminUserId(userId)) {
+    return {
+      notFound: true,
+    };
+  }
+
+  console.log(userId);
+
   const articles = await db
     .selectFrom('articles')
     .select([

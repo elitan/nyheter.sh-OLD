@@ -19,3 +19,10 @@ export function renderAgo(date: Date) {
     return format(date, 'd MMMM, HH:mm');
   }
 }
+
+export function isAllowedAdminUserId(userId: string) {
+  return [
+    'user_2URfAQaMVqvIi0lWfkVoEkK97qz',
+    'user_2UNVeD1ZI8CTqInfzVfzrfYL0K7',
+  ].includes(userId);
+}
