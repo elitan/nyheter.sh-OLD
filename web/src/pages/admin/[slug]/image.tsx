@@ -151,7 +151,7 @@ export default function Page(
       </div>
       <div className="flex space-x-4 items-center">
         <div>
-          <img src={article.imageUrl} className="h-32" />
+          <img src={article.imageUrl ?? ''} className="h-32" />
         </div>
         <div>
           <h1 className="text-2xl">{article.title}</h1>
