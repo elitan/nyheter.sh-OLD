@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -7,7 +6,7 @@ import {
 } from '@/server/trpc';
 import { db } from '@/utils/db';
 import { articleSchema } from '@/utils/types';
-import { twitterClient } from '../utils/helpers';
+import { postToFacebook, twitterClient } from '../utils/helpers';
 
 export const articlesRouter = createTRPCRouter({
   getOne: publicProcedure
@@ -99,10 +98,17 @@ export const articlesRouter = createTRPCRouter({
         };
       }
 
-      // the image is now uploaded, let's tweet about it!
       const { title } = article;
       const linkToArticle = `https://nyheter.sh/nyheter/${article.slug}`;
-      await twitterClient.v2.tweet(`${title}\n\n${linkToArticle}`);
+      const post = `${title}\n\n${linkToArticle}`;
+
+      // try {
+      //   await twitterClient.v2.tweet(post);
+      // } catch (error) {
+      //   console.error('Error posting to Twitter:', error);
+      //   throw error;
+      // }
+      await postToFacebook(post);
 
       await db
         .updateTable('articles')

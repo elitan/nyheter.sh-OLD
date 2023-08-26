@@ -33,6 +33,7 @@
     "easymde": "^2.18.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
+    "fb": "^2.0.0",
     "kysely": "^0.26.1",
     "kysely-codegen": "^0.10.1",
     "next": "13.4.12",
@@ -60,6 +61,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/fb": "^0.0.28",
     "@types/pg": "^8.10.2",
     "@types/uuid": "^9.0.2",
     "prettier": "^3.0.1"

@@ -108,7 +108,7 @@ export default function Page(
                         )}
                       </div>
 
-                      <div className="mt-1 flex items-center gap-x-1.5">
+                      <div className="mt-1 hidden flex items-center gap-x-1.5">
                         {article.isPublishedOnSocialMedia ? (
                           <>
                             <div className="flex-none rounded-full bg-emerald-500/20 p-1">

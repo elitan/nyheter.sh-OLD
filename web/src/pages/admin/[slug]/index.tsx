@@ -175,7 +175,7 @@ function ArticleEdit({ article }: { article: z.infer<typeof articleSchema> }) {
           <div>
             <button
               type="button"
-              className="rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+              className="hidden rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
               onClick={handlePublishOnSocialMedia}
             >
               Publish on social media (X (Twitter) and Linkedin)
@@ -189,7 +189,7 @@ function ArticleEdit({ article }: { article: z.infer<typeof articleSchema> }) {
             className="rounded-md bg-cyan-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
             onClick={handleTogglePublished}
           >
-            {article.isPublished ? 'Unpublish article' : 'Publish article'}
+            {article.isPublished ? 'Unpublish' : 'Publish'}
           </button>
         </div>
 
