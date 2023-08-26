@@ -42,6 +42,14 @@ export async function getServerSideProps({ params }: { params: IParams }) {
     };
   }
 
+  await db
+    .updateTable('articles')
+    .set((eb) => ({
+      pageViews: eb.bxp('pageViews', '+', 1),
+    }))
+    .where('id', '=', article.id)
+    .execute();
+
   return {
     props: {
       article,

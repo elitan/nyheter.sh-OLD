@@ -25,7 +25,8 @@ CREATE TABLE articles(
   is_related_to_sweden boolean,
   is_published boolean DEFAULT FALSE,
   is_published_on_social_media boolean DEFAULT FALSE,
-  category text
+  category text,
+  page_views integer DEFAULT 0
 );
 
 CREATE OR REPLACE TRIGGER articles_update_updated_at

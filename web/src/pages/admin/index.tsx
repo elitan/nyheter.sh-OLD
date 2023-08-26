@@ -18,8 +18,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     throw new Error('Unauthorized');
   }
 
-  console.log(userId);
-
   const articles = await db
     .selectFrom('articles')
     .select([
@@ -36,7 +34,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     .where('title', 'is not', null)
     .where('isRelatedToSweden', '=', true)
     .orderBy('createdAt', 'desc')
-    .limit(45)
+    .limit(30)
     .execute();
 
   return {
@@ -62,8 +60,7 @@ export default function Page(
               !article.title ||
               !article.body ||
               !article.createdAt ||
-              !article.slug ||
-              !article.imageUrl
+              !article.slug
             ) {
               return;
             }
@@ -78,7 +75,7 @@ export default function Page(
                 <div className="flex flex-grow items-center gap-x-4 pr-6">
                   <img
                     className="h-16 w-24 flex-none rounded-sm bg-gray-50 object-cover"
-                    src={article.imageUrl}
+                    src={article.imageUrl ?? ''}
                     alt=""
                   />
                   <div className="min-w-0 flex-grow">
@@ -105,20 +102,29 @@ export default function Page(
                               <div className="h-1.5 w-1.5 rounded-full bg-rose-500" />
                             </div>
                             <p className="text-xs leading-5 text-gray-500">
-                              Not Published
+                              Not published
                             </p>
                           </>
                         )}
                       </div>
 
                       <div className="mt-1 flex items-center gap-x-1.5">
-                        {article.isPublishedOnSocialMedia && (
+                        {article.isPublishedOnSocialMedia ? (
                           <>
                             <div className="flex-none rounded-full bg-emerald-500/20 p-1">
                               <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                             </div>
                             <p className="text-xs leading-5 text-gray-500">
-                              Published on Social Media
+                              Published on social media
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex-none rounded-full bg-rose-500/20 p-1">
+                              <div className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                            </div>
+                            <p className="text-xs leading-5 text-gray-500">
+                              Not published on social media
                             </p>
                           </>
                         )}

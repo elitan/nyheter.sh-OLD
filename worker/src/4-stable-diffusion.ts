@@ -91,11 +91,7 @@ const s3Client = new S3({
       })
       .where('id', '=', article.id)
       .execute();
-
-    await sendDiscordMessage(`${title}\n\n${linkToArticle}`);
   }
-
-  console.log('done');
 
   process.exit(0);
 })();

@@ -24,6 +24,7 @@ export interface Articles {
   updatedAt: Generated<Timestamp | null>;
   isPublished: Generated<boolean | null>;
   isPublishedOnSocialMedia: Generated<boolean | null>;
+  pageViews: Generated<number | null>;
 }
 
 export interface DB {
