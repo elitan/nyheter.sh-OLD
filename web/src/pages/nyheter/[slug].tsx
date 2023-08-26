@@ -30,7 +30,7 @@ export async function getServerSideProps({ params }: { params: IParams }) {
       'createdAt',
     ])
     .where('slug', '=', slug)
-    .where('isRelatedToSweden', '=', true)
+    .where('isPublished', '=', true)
     .executeTakeFirst();
 
   if (!article) {
