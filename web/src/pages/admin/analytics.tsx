@@ -1,9 +1,4 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import { MainContainer } from '@/components/MainContainer';
-import { db } from '@/utils/db';
-import { InferGetServerSidePropsType } from 'next';
-import Link from 'next/link';
-import { getFirstTwoSentences, renderAgo } from '@/utils/helpers';
 import { AdminMenu } from '@/components/AdminMenu';
 
 function AnalyticsEmbed() {
