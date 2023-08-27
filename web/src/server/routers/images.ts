@@ -19,14 +19,21 @@ export const imagesRouter = createTRPCRouter({
     .input(
       z.object({
         articleId: z.number(),
-        service: z.enum(['su', 'flickr', 'unsplash', 'regeringskansliet']),
+        service: z.enum([
+          'su',
+          'flickr',
+          'unsplash',
+          'regeringskansliet',
+          'wikimedia',
+          'upload',
+        ]),
         query: z.string(),
       }),
     )
     .query(async ({ input }) => {
       const { articleId, service, query } = input;
 
-      if (!query) {
+      if (!query || service === 'upload') {
         return {
           images: [],
         };
@@ -75,24 +82,21 @@ export const imagesRouter = createTRPCRouter({
       };
     }),
 
-  update: protectedProcedure
+  upload: protectedProcedure
     .input(
       z.object({
         articleId: z.number(),
-        imageUrl: z.string(),
+        imageBase64: z.string(),
       }),
     )
     .mutation(async ({ input }) => {
-      const { articleId, imageUrl } = input;
+      const { articleId, imageBase64 } = input;
 
-      console.log('get image');
-      const rawImage = await getImageAsBuffer(imageUrl);
-      console.log('transform image');
+      const rawImage = Buffer.from(imageBase64.split(',')[1], 'base64');
+
       const imageBinary = await new Transformer(rawImage).webp(75);
 
       const fileName = `images/${articleId}-${uuidv4()}.webp`;
-
-      console.log('uploading image...');
 
       // upload image to spaces
       const params = {
@@ -105,7 +109,44 @@ export const imagesRouter = createTRPCRouter({
 
       await put(params);
 
-      console.log('upload done.');
+      await db
+        .updateTable('articles')
+        .set({
+          imageUrl: `https://nyheter.ams3.digitaloceanspaces.com/${fileName}`,
+        })
+        .where('id', '=', articleId)
+        .execute();
+
+      return {
+        ok: true,
+      };
+    }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        articleId: z.number(),
+        imageUrl: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { articleId, imageUrl } = input;
+
+      const rawImage = await getImageAsBuffer(imageUrl);
+      const imageBinary = await new Transformer(rawImage).webp(75);
+
+      const fileName = `images/${articleId}-${uuidv4()}.webp`;
+
+      // upload image to spaces
+      const params = {
+        Bucket: 'nyheter',
+        Key: fileName,
+        Body: imageBinary,
+        ContentType: 'image/webp',
+        ACL: 'public-read',
+      };
+
+      await put(params);
 
       await db
         .updateTable('articles')
