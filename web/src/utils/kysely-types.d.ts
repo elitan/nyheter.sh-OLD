@@ -6,6 +6,16 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
+export interface ArticleImages {
+  id: Generated<number>;
+  createdAt: Generated<Timestamp | null>;
+  updatedAt: Generated<Timestamp | null>;
+  imagePrompt: string | null;
+  imageIsAiGenerated: Generated<boolean | null>;
+  imageUrl: string;
+  articleId: number | null;
+}
+
 export interface Articles {
   id: Generated<number>;
   createdAt: Generated<Timestamp | null>;
@@ -25,8 +35,10 @@ export interface Articles {
   isPublished: Generated<boolean | null>;
   isPublishedOnSocialMedia: Generated<boolean | null>;
   pageViews: Generated<number | null>;
+  articleImageId: number | null;
 }
 
 export interface DB {
+  articleImages: ArticleImages;
   articles: Articles;
 }

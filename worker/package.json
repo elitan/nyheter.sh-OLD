@@ -12,6 +12,8 @@
     "elevenlabs": "ts-node src/5-eleven-labs.ts",
     "piper": "ts-node src/5-piper.ts",
     "codegen": "kysely-codegen --dialect postgres --camel-case --out-file ./src/utils/kysely-types.d.ts",
+    "scripts-move-images-to-article-images-table": "ts-node src/scripts/move-images-to-article-images-table.ts",
+    "backup": "ts-node src/100-backup.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

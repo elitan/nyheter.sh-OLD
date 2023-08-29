@@ -38,18 +38,19 @@ export async function getServerSideProps({ params }: { params: IParams }) {
 
   const article = await db
     .selectFrom('articles')
+    .innerJoin('articleImages', 'articles.articleImageId', 'articleImages.id')
     .select([
-      'id',
-      'title',
-      'body',
-      'slug',
-      'sverigesRadioLink',
-      'sverigesRadioTitle',
-      'imageUrl',
-      'imageIsAiGenerated',
-      'audioUrl',
-      'imagePrompt',
-      'createdAt',
+      'articles.id',
+      'articles.title',
+      'articles.createdAt',
+      'articles.body',
+      'articles.slug',
+      'articles.sverigesRadioLink',
+      'articles.sverigesRadioTitle',
+      'articles.audioUrl',
+      'articles.imagePrompt',
+      'articleImages.imageUrl',
+      'articleImages.imageIsAiGenerated',
     ])
     .where('slug', '=', slug)
     .where('isRelatedToSweden', '=', true)
@@ -315,7 +316,7 @@ export default function Page(
       ) : (
         <div>
           <h1>Paste an Image Here</h1>
-          <div ref={imgRef}></div>
+          <div ref={imgRef} className="max-w-7xl"></div>
 
           <div className="mt-6 flex items-center justify-end gap-x-6">
             <button

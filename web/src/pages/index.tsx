@@ -2,21 +2,21 @@ import { ArticleSummaryLarge } from '@/components/ArticleSummaryLarge';
 import { ArticleSummarySmall } from '@/components/ArticleSummarySmall';
 import { MainContainer } from '@/components/MainContainer';
 import { db } from '@/utils/db';
-import { sv } from 'date-fns/locale';
 import type { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 
 export const getServerSideProps = async () => {
   const articles = await db
     .selectFrom('articles')
+    .innerJoin('articleImages', 'articles.articleImageId', 'articleImages.id')
     .select([
-      'id',
-      'createdAt',
-      'title',
-      'slug',
-      'body',
-      'imageUrl',
-      'category',
+      'articles.id',
+      'articles.createdAt',
+      'articles.title',
+      'articles.slug',
+      'articles.body',
+      'articles.category',
+      'articleImages.imageUrl',
     ])
     .where('title', 'is not', null)
     .where('isPublished', '=', true)

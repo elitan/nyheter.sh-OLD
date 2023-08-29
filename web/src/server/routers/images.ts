@@ -39,11 +39,21 @@ export const imagesRouter = createTRPCRouter({
         };
       }
 
-      console.log(service, query);
-
       const images: string[] = [];
 
-      if (service === 'flickr') {
+      if (service === 'su') {
+        // get AI generated (and previously associated images) for this news article
+        const images = await db
+          .selectFrom('articleImages')
+          .select(['id', 'imageUrl'])
+          .execute();
+
+        return {
+          images: images.map((i) => {
+            return i.imageUrl;
+          }),
+        };
+      } else if (service === 'flickr') {
         const res = await searchFlickrPhotos(query);
 
         res.photos.photo.forEach((photo: any) => {
@@ -60,19 +70,14 @@ export const imagesRouter = createTRPCRouter({
           perPage: 100,
         });
 
-        console.log(res);
-
-        console.log(JSON.stringify(res.response?.results, null, 2));
-
         res.response?.results.forEach((photo) => {
           images.push(photo.urls.regular);
         });
-
-        console.log(res.response?.results.length);
       } else if (service === 'regeringskansliet') {
         const res = await searchRkbildPhotos(query);
 
         res.assets.data.forEach((photo: any) => {
+          // todo: return an image with a good size, current one is usually too small.
           images.push(`https://rkbild.se/${photo.previews[0].href}`);
         });
       }
@@ -109,10 +114,20 @@ export const imagesRouter = createTRPCRouter({
 
       await put(params);
 
+      const insertedArticleImage = await db
+        .insertInto('articleImages')
+        .values({
+          articleId,
+          imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/images/${fileName}`,
+          imageIsAiGenerated: false,
+        })
+        .returning(['id'])
+        .executeTakeFirstOrThrow();
+
       await db
         .updateTable('articles')
         .set({
-          imageUrl: `https://nyheter.ams3.digitaloceanspaces.com/${fileName}`,
+          articleImageId: insertedArticleImage.id,
         })
         .where('id', '=', articleId)
         .execute();
@@ -148,10 +163,20 @@ export const imagesRouter = createTRPCRouter({
 
       await put(params);
 
+      const insertedArticleImage = await db
+        .insertInto('articleImages')
+        .values({
+          articleId,
+          imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/images/${fileName}`,
+          imageIsAiGenerated: false,
+        })
+        .returning(['id'])
+        .executeTakeFirstOrThrow();
+
       await db
         .updateTable('articles')
         .set({
-          imageUrl: `https://nyheter.ams3.digitaloceanspaces.com/${fileName}`,
+          articleImageId: insertedArticleImage.id,
         })
         .where('id', '=', articleId)
         .execute();

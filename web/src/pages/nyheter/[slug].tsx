@@ -19,18 +19,20 @@ export async function getServerSideProps({ params }: { params: IParams }) {
 
   const article = await db
     .selectFrom('articles')
+    .innerJoin('articleImages', 'articles.articleImageId', 'articleImages.id')
     .select([
-      'id',
-      'title',
-      'body',
-      'slug',
-      'sverigesRadioLink',
-      'sverigesRadioTitle',
-      'imageUrl',
-      'imageIsAiGenerated',
-      'audioUrl',
-      'imagePrompt',
-      'createdAt',
+      'articles.id',
+      'articles.createdAt',
+      'articles.updatedAt',
+      'articles.title',
+      'articles.body',
+      'articles.slug',
+      'articles.sverigesRadioLink',
+      'articles.sverigesRadioTitle',
+      'articles.audioUrl',
+      'articleImages.imageUrl',
+      'articleImages.imageIsAiGenerated',
+      'articleImages.imagePrompt',
     ])
     .where('slug', '=', slug)
     .where('isPublished', '=', true)
@@ -91,9 +93,9 @@ export default function Page(
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: article.title,
-    image: [article.imageUrl],
+    image: [`/api/og-image/${article.slug}`],
     datePublished: article.createdAt,
-    dateModified: article.createdAt,
+    dateModified: article.updatedAt,
     // author: {
     //   '@type': 'Person',
     //   name: 'Johan article.authorName,

@@ -1,8 +1,7 @@
 import { db } from './utils/db';
 import 'dotenv/config';
 import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
-import { sendDiscordMessage } from './utils/discord';
-import { Transformer } from '@napi-rs/image';
+import { Transformer, pngQuantize } from '@napi-rs/image';
 
 const s3Client = new S3({
   endpoint: 'https://ams3.digitaloceanspaces.com',
@@ -18,7 +17,7 @@ const s3Client = new S3({
     .selectFrom('articles')
     .select(['id', 'title', 'slug', 'imagePrompt'])
     .where('imagePrompt', 'is not', null)
-    .where('imageUrl', 'is', null)
+    .where('articleImageId', 'is', null)
     .orderBy('id', 'desc')
     .execute();
 
@@ -45,8 +44,9 @@ const s3Client = new S3({
       cfg_scale: 8,
       sampler_index: 'Euler a',
       restore_faces: true,
-      width: 1200,
-      height: 800,
+      width: 800,
+      height: 500,
+      batch_size: 4,
     });
 
     const response = await fetch(url, {
@@ -57,40 +57,45 @@ const s3Client = new S3({
 
     const data = await response.json();
 
-    console.log('data from SU:');
-    console.log(data);
+    for (const [index, imageData] of data.images.entries()) {
+      // base64 encoded imageData
 
-    // base64 encoded image data
-    const imageData = `${data.images[0]}`;
+      // generate unique filename
+      const fileName = `images/${article.id}-${index}.webp`;
 
-    console.log(imageData);
+      const rawImage = Buffer.from(imageData, 'base64');
 
-    // generate unique filename
-    const fileName = `images/${article.id}-main.webp`;
+      const imageBinary = await new Transformer(rawImage).webp(75);
 
-    const rawImage = Buffer.from(imageData, 'base64');
+      // upload image to spaces
+      const params = {
+        Bucket: 'nyheter',
+        Key: fileName,
+        Body: imageBinary,
+        ContentType: 'image/webp',
+        ACL: 'public-read',
+      };
 
-    const imageBinary = await new Transformer(rawImage).webp(75);
+      await s3Client.send(new PutObjectCommand(params));
 
-    // upload image to spaces
-    const params = {
-      Bucket: 'nyheter',
-      Key: fileName,
-      Body: imageBinary,
-      ContentType: 'image/webp',
-      ACL: 'public-read',
-    };
+      const insertedArticleImage = await db
+        .insertInto('articleImages')
+        .values({
+          articleId: article.id,
+          imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/images/${article.id}-${index}.webp`,
+          imagePrompt,
+        })
+        .returning(['id'])
+        .executeTakeFirstOrThrow();
 
-    await s3Client.send(new PutObjectCommand(params));
-
-    await db
-      .updateTable('articles')
-      .set({
-        imagePrompt,
-        imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`,
-      })
-      .where('id', '=', article.id)
-      .execute();
+      await db
+        .updateTable('articles')
+        .set({
+          articleImageId: insertedArticleImage.id,
+        })
+        .where('id', '=', article.id)
+        .execute();
+    }
   }
 
   process.exit(0);
