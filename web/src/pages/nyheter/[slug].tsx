@@ -93,7 +93,7 @@ export default function Page(
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: article.title,
-    image: [`/api/og-image/${article.slug}`],
+    image: [`https://nyheter.sh/api/og-image/${article.slug}`],
     datePublished: article.createdAt,
     dateModified: article.updatedAt,
     // author: {
@@ -126,7 +126,7 @@ export default function Page(
           description: article.body?.slice(0, 255),
           images: [
             {
-              url: `/api/og-image/${article.slug}`,
+              url: `https://nyheter.sh/api/og-image/${article.slug}`,
               alt: article.title as string,
               type: 'image/png',
             },
