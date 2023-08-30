@@ -21,8 +21,18 @@ export default async function handler(
   // fetch current imageUrl
 
   const rawImage = await getImageAsBuffer(article.imageUrl);
-  const imageBinary = await new Transformer(rawImage).png();
+  const imageRaw = await new Transformer(rawImage);
+
+  const metadata = await imageRaw.metadata();
+
+  if (metadata.width > 1200) {
+    imageRaw.resize({
+      width: 1200,
+    });
+  }
+
+  const imagePng = await imageRaw.png();
 
   res.setHeader('Content-Type', 'image/png');
-  res.status(200).send(imageBinary);
+  res.status(200).send(imagePng);
 }
