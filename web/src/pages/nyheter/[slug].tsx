@@ -126,7 +126,7 @@ export default function Page(
           description: article.body?.slice(0, 255),
           images: [
             {
-              url: article.imageUrl ?? '',
+              url: `/api/og-image/${article.slug}`,
               alt: article.title as string,
               type: 'image/png',
             },
