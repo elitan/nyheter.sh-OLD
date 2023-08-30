@@ -14,6 +14,7 @@ import { api } from '@/utils/api';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { MainContainer } from '@/components/MainContainer';
+import { search } from 'unsplash-js/dist/internals';
 
 interface IParams extends ParsedUrlQuery {
   slug: string;
@@ -81,19 +82,29 @@ export default function Page(
 
   const imgRef = useRef<HTMLDivElement>(null);
 
-  const [service, setService] = useState<
-    'su' | 'flickr' | 'unsplash' | 'regeringskansliet' | 'wikimedia' | 'upload'
-  >('unsplash');
-
   const [query, setQuery] = useState('');
-  const [querySubmitted, setQuerySubmitted] = useState('');
+  const [searchParameters, setSearchParameters] = useState<{
+    service:
+      | 'su'
+      | 'flickr'
+      | 'unsplash'
+      | 'regeringskansliet'
+      | 'wikimedia'
+      | 'upload';
+    query: string;
+  }>({
+    service: 'su',
+    query: '',
+  });
   const [imageBase64, setImageBase64] = useState<string | null>(null);
+
+  console.log(searchParameters);
 
   const imagesQuery = api.images.get.useQuery(
     {
       articleId: article.id,
-      service,
-      query: querySubmitted,
+      service: searchParameters.service,
+      query: searchParameters.query,
     },
     {
       refetchOnWindowFocus: false,
@@ -141,7 +152,10 @@ export default function Page(
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setQuerySubmitted(query);
+    setSearchParameters({
+      service: searchParameters.service,
+      query,
+    });
   }
 
   function handleOnImageClick(imageUrl: string) {
@@ -181,6 +195,8 @@ export default function Page(
     );
   }
 
+  console.log(imagesQuery.data?.images);
+
   useEffect(() => {
     // Attach the paste event listener to the document
     document.addEventListener('paste', handlePaste);
@@ -195,21 +211,24 @@ export default function Page(
 
   const buttonActive = `bg-cyan-600 text-white hover:border-transparent`;
 
-  const aiButtonClasses = twMerge(buttonBase, service === 'su' && buttonActive);
+  const aiButtonClasses = twMerge(
+    buttonBase,
+    searchParameters.service === 'su' && buttonActive,
+  );
 
   const flickrButtonClasses = twMerge(
     buttonBase,
-    service === 'flickr' && buttonActive,
+    searchParameters.service === 'flickr' && buttonActive,
   );
 
   const unsplashButtonClasses = twMerge(
     buttonBase,
-    service === 'unsplash' && buttonActive,
+    searchParameters.service === 'unsplash' && buttonActive,
   );
 
   const rkbildButtonClasses = twMerge(
     buttonBase,
-    service === 'regeringskansliet' && buttonActive,
+    searchParameters.service === 'regeringskansliet' && buttonActive,
   );
 
   return (
@@ -231,28 +250,48 @@ export default function Page(
             <button
               type="button"
               className={aiButtonClasses}
-              onClick={() => setService('su')}
+              onClick={() => {
+                setSearchParameters({
+                  service: 'su',
+                  query: searchParameters.query,
+                });
+              }}
             >
               AI
             </button>
             <button
               type="button"
               className={flickrButtonClasses}
-              onClick={() => setService('flickr')}
+              onClick={() => {
+                setSearchParameters({
+                  service: 'flickr',
+                  query: searchParameters.query,
+                });
+              }}
             >
               Flickr
             </button>
             <button
               type="button"
               className={unsplashButtonClasses}
-              onClick={() => setService('unsplash')}
+              onClick={() => {
+                setSearchParameters({
+                  service: 'unsplash',
+                  query: searchParameters.query,
+                });
+              }}
             >
               Unsplash
             </button>
             <button
               type="button"
               className={rkbildButtonClasses}
-              onClick={() => setService('regeringskansliet')}
+              onClick={() => {
+                setSearchParameters({
+                  service: 'regeringskansliet',
+                  query: searchParameters.query,
+                });
+              }}
             >
               Regeringskansliet
             </button>
@@ -271,14 +310,19 @@ export default function Page(
               type="button"
               className={twMerge(
                 buttonBase,
-                service === 'upload' && buttonActive,
+                searchParameters.service === 'upload' && buttonActive,
               )}
-              onClick={() => setService('upload')}
+              onClick={() => {
+                setSearchParameters({
+                  service: 'upload',
+                  query: searchParameters.query,
+                });
+              }}
             >
               Upload
             </button>
           </div>
-          {service !== 'upload' && (
+          {searchParameters.service !== 'upload' && (
             <div className="sm:col-span-full flex space-x-3">
               <input
                 value={query}
@@ -298,7 +342,7 @@ export default function Page(
         </div>
       </form>
 
-      {service !== 'upload' ? (
+      {searchParameters.service !== 'upload' ? (
         <>
           {imagesQuery.isLoading && <div>Loading...</div>}
 

@@ -20,16 +20,17 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   const articles = await db
     .selectFrom('articles')
+    .innerJoin('articleImages', 'articles.articleImageId', 'articleImages.id')
     .select([
-      'id',
-      'createdAt',
-      'title',
-      'slug',
-      'body',
-      'imageUrl',
-      'category',
-      'isPublished',
-      'isPublishedOnSocialMedia',
+      'articles.id',
+      'articles.createdAt',
+      'articles.title',
+      'articles.slug',
+      'articles.body',
+      'articles.category',
+      'articles.isPublished',
+      'articles.isPublishedOnSocialMedia',
+      'articleImages.imageUrl',
     ])
     .where('title', 'is not', null)
     .where('isRelatedToSweden', '=', true)

@@ -24,23 +24,40 @@ export async function searchRkbildPhotos(query: string): Promise<any> {
   );
 
   const queryString = new URLSearchParams(stringifiedParams).toString();
-  const url = `https://rkbild.se/fotoweb/archives/5000-Bildbank/?${queryString}`;
+  const url =
+    queryString !== 'q='
+      ? `https://rkbild.se/fotoweb/archives/5000-Bildbank/?${queryString}`
+      : 'https://rkbild.se/fotoweb/archives/5000-Bildbank/;p=90';
 
+  const headers =
+    queryString !== 'q='
+      ? {
+          Accept: 'application/vnd.fotoware.collection+json, */*; q=0.01',
+        }
+      : {
+          Accept: 'application/vnd.fotoware.assetlist+json, */*; q=0.01',
+        };
+
+  console.log('url', url);
+  console.log('queryString', queryString);
   try {
     const response = await fetch(url, {
-      headers: {
-        Accept: 'application/vnd.fotoware.collection+json, */*; q=0.01',
-      },
+      headers,
     });
     console.log('response', response.ok);
     if (!response.ok) {
       throw new Error(`Fotoweb API returned an error: ${response.statusText}`);
     }
     console.log('get json');
-    const data = await response.json();
+    const jsonResponse = (await response.json()) as any;
     console.log('json print:');
-    console.log(data);
-    return data;
+    console.log(jsonResponse.data);
+
+    if (queryString !== 'q=') {
+      return jsonResponse?.assets?.data;
+    } else {
+      return jsonResponse.data;
+    }
   } catch (error) {
     console.error('Error fetching from Fotoweb:', error);
     throw error;

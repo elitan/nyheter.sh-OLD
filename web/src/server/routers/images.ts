@@ -33,7 +33,10 @@ export const imagesRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const { articleId, service, query } = input;
 
-      if (!query || service === 'upload') {
+      if (
+        (!query && ['flickr', 'unsplash'].includes(service)) ||
+        service === 'upload'
+      ) {
         return {
           images: [],
         };
@@ -42,11 +45,15 @@ export const imagesRouter = createTRPCRouter({
       const images: string[] = [];
 
       if (service === 'su') {
+        console.log('ai images');
         // get AI generated (and previously associated images) for this news article
         const images = await db
           .selectFrom('articleImages')
           .select(['id', 'imageUrl'])
+          .where('articleId', '=', articleId)
           .execute();
+
+        console.log({ images });
 
         return {
           images: images.map((i) => {
@@ -74,13 +81,20 @@ export const imagesRouter = createTRPCRouter({
           images.push(photo.urls.regular);
         });
       } else if (service === 'regeringskansliet') {
-        const res = await searchRkbildPhotos(query);
+        const rkPhotos = await searchRkbildPhotos(query);
 
-        res.assets.data.forEach((photo: any) => {
-          // todo: return an image with a good size, current one is usually too small.
+        console.log('images length:');
+        console.log(images.length);
+
+        rkPhotos.forEach((photo: any) => {
+          // todo: return an photo with a good size, current one is usually too small.
+          // console.log(photo);
+          console.log(`https://rkbild.se/${photo.previews[0].href}`);
           images.push(`https://rkbild.se/${photo.previews[0].href}`);
         });
       }
+
+      console.log(images);
 
       return {
         images,
