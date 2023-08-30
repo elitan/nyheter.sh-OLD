@@ -26,10 +26,11 @@ const articleSchema = z.object({
   slug: z.string(),
   sverigesRadioLink: z.string(),
   sverigesRadioTitle: z.string(),
+  articleImageId: z.number(),
   imageUrl: z.string().nullable(),
   imageIsAiGenerated: z.boolean(),
   audioUrl: z.string(),
-  imagePrompt: z.string(),
+  imagePrompt: z.string().nullable(),
   createdAt: z.date(),
 });
 
@@ -48,7 +49,8 @@ export async function getServerSideProps({ params }: { params: IParams }) {
       'articles.sverigesRadioLink',
       'articles.sverigesRadioTitle',
       'articles.audioUrl',
-      'articles.imagePrompt',
+      'articles.articleImageId',
+      'articleImages.imagePrompt',
       'articleImages.imageUrl',
       'articleImages.imageIsAiGenerated',
     ])

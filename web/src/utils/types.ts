@@ -20,7 +20,7 @@ export const articleSchema = z.object({
   imageUrl: z.string().nullable(),
   imageIsAiGenerated: z.boolean(),
   audioUrl: z.string(),
-  imagePrompt: z.string(),
+  imagePrompt: z.string().nullable(),
   createdAt: z.date(),
   isPublished: z.boolean(),
   isPublishedOnSocialMedia: z.boolean(),

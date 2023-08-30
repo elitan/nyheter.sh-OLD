@@ -118,7 +118,7 @@ export const imagesRouter = createTRPCRouter({
         .insertInto('articleImages')
         .values({
           articleId,
-          imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/images/${fileName}`,
+          imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`,
           imageIsAiGenerated: false,
         })
         .returning(['id'])
@@ -152,6 +152,8 @@ export const imagesRouter = createTRPCRouter({
 
       const fileName = `images/${articleId}-${uuidv4()}.webp`;
 
+      console.log({ fileName });
+
       // upload image to spaces
       const params = {
         Bucket: 'nyheter',
@@ -161,13 +163,15 @@ export const imagesRouter = createTRPCRouter({
         ACL: 'public-read',
       };
 
+      console.log({ params });
+
       await put(params);
 
       const insertedArticleImage = await db
         .insertInto('articleImages')
         .values({
           articleId,
-          imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/images/${fileName}`,
+          imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`,
           imageIsAiGenerated: false,
         })
         .returning(['id'])

@@ -14,26 +14,63 @@ export const articlesRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const { slug } = input;
 
+      const sql = db
+        .selectFrom('articles')
+        .innerJoin(
+          'articleImages',
+          'articles.articleImageId',
+          'articleImages.id',
+        )
+        .select([
+          'articles.id',
+          'articles.title',
+          'articles.createdAt',
+          'articles.body',
+          'articles.slug',
+          'articles.sverigesRadioLink',
+          'articles.sverigesRadioTitle',
+          'articles.audioUrl',
+          'articles.articleImageId',
+          'articles.isPublished',
+          'articles.isPublishedOnSocialMedia',
+          'articleImages.imagePrompt',
+          'articleImages.imageUrl',
+          'articleImages.imageIsAiGenerated',
+        ])
+        .where('slug', '=', slug)
+        .where('isRelatedToSweden', '=', true)
+        .compile();
+
+      console.log({ sql });
+
       const article = await db
         .selectFrom('articles')
+        .innerJoin(
+          'articleImages',
+          'articles.articleImageId',
+          'articleImages.id',
+        )
         .select([
-          'id',
-          'title',
-          'body',
-          'slug',
-          'sverigesRadioLink',
-          'sverigesRadioTitle',
-          'imageUrl',
-          'imageIsAiGenerated',
-          'audioUrl',
-          'imagePrompt',
-          'createdAt',
-          'isPublished',
-          'isPublishedOnSocialMedia',
+          'articles.id',
+          'articles.title',
+          'articles.createdAt',
+          'articles.body',
+          'articles.slug',
+          'articles.sverigesRadioLink',
+          'articles.sverigesRadioTitle',
+          'articles.audioUrl',
+          'articles.articleImageId',
+          'articles.isPublished',
+          'articles.isPublishedOnSocialMedia',
+          'articleImages.imagePrompt',
+          'articleImages.imageUrl',
+          'articleImages.imageIsAiGenerated',
         ])
         .where('slug', '=', slug)
         .where('isRelatedToSweden', '=', true)
         .executeTakeFirst();
+
+      console.log(slug, article);
 
       const parsedArticle = articleSchema.parse(article);
 
