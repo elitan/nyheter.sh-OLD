@@ -1,9 +1,12 @@
 import { getImageAsBuffer } from '@/server/utils/helpers';
 import { db } from '@/utils/db';
 import { Transformer } from '@napi-rs/image';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextRequest, res: NextResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   // get slug (or something)
 
   const { slug } = req.query as any;
@@ -20,5 +23,6 @@ export default async function handler(req: NextRequest, res: NextResponse) {
   const rawImage = await getImageAsBuffer(article.imageUrl);
   const imageBinary = await new Transformer(rawImage).png();
 
-  return;
+  res.setHeader('Content-Type', 'image/png');
+  res.status(200).send(imageBinary);
 }

@@ -134,7 +134,7 @@ function ArticleEdit({ article }: { article: z.infer<typeof articleSchema> }) {
                 <img
                   src={article.imageUrl ?? ''}
                   className="max-h-96"
-                  alt={article.imagePrompt}
+                  alt={article.imagePrompt ?? ''}
                 />
                 <Link href={`/admin/${article.slug}/image`}>Change image</Link>
               </div>
