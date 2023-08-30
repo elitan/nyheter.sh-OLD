@@ -100,14 +100,6 @@ export default function Page(
     //   '@type': 'Person',
     //   name: 'Johan article.authorName,
     // },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Nyheter.sh',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://nyheter.sh/logo.png',
-      },
-    },
     description: article.body?.slice(0, 255),
   };
 
