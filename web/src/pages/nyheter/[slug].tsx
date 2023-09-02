@@ -32,6 +32,7 @@ export async function getServerSideProps({ params }: { params: IParams }) {
       'articles.audioUrl',
       'articleImages.imageUrl',
       'articleImages.imageIsAiGenerated',
+      'articleImages.creditInfo',
       'articleImages.imagePrompt',
     ])
     .where('slug', '=', slug)
@@ -139,16 +140,20 @@ export default function Page(
             </div>
           )}
         </div>
-        <div className="mx-auto lg:h-[400px] md:w-[750px]">
+        <div className="relative mx-auto lg:h-[400px] md:w-[750px]">
           <img
             src={article.imageUrl ?? ''}
-            alt={article.imagePrompt ?? ''}
             className="w-full h-full border border-gray-200 rounded-lg  object-cover"
             style={{
               display: 'block',
               objectFit: 'cover',
             }}
           />
+          {article.creditInfo && (
+            <div className="absolute bottom-1 right-0 bg-white opacity-80 p-1 text-xs">
+              Foto: {article.creditInfo}
+            </div>
+          )}
         </div>
         <div className="mx-auto md:w-[750px] pt-2 pb-4">
           <p className="text-gray-500 text-xs mt-1 my-4">

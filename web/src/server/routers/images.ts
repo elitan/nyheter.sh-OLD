@@ -49,7 +49,7 @@ export const imagesRouter = createTRPCRouter({
         // get AI generated (and previously associated images) for this news article
         const images = await db
           .selectFrom('articleImages')
-          .select(['id', 'imageUrl', 'imageIsAiGenerated'])
+          .select(['id', 'imageUrl', 'imageIsAiGenerated', 'creditInfo'])
           .where('articleId', '=', articleId)
           .execute();
 
@@ -58,7 +58,7 @@ export const imagesRouter = createTRPCRouter({
             return {
               url: i.imageUrl,
               isAiGenerated: i.imageIsAiGenerated ?? false,
-              creditInfo: '',
+              creditInfo: i.creditInfo,
             };
           }),
         };
