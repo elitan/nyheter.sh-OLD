@@ -58,7 +58,7 @@ export const imagesRouter = createTRPCRouter({
             return {
               url: i.imageUrl,
               isAiGenerated: i.imageIsAiGenerated ?? false,
-              creditInfo: i.creditInfo,
+              creditInfo: i.creditInfo ?? '',
             };
           }),
         };
