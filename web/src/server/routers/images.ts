@@ -100,7 +100,7 @@ export const imagesRouter = createTRPCRouter({
           images.push({
             url: `https://rkbild.se/${photo.previews[0].href}`,
             isAiGenerated: false,
-            creditInfo: photo.metadata['80'].value,
+            creditInfo: photo.metadata['80'].value[0],
           });
         });
       }
