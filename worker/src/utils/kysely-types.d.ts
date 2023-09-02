@@ -14,6 +14,7 @@ export interface ArticleImages {
   imageIsAiGenerated: Generated<boolean | null>;
   imageUrl: string;
   articleId: number | null;
+  creditInfo: string | null;
 }
 
 export interface Articles {
@@ -38,7 +39,16 @@ export interface Articles {
   articleImageId: number | null;
 }
 
+export interface ArticleSocialMediaHooks {
+  id: Generated<number>;
+  createdAt: Generated<Timestamp | null>;
+  updatedAt: Generated<Timestamp | null>;
+  articleId: number | null;
+  hook: string | null;
+}
+
 export interface DB {
   articleImages: ArticleImages;
   articles: Articles;
+  articleSocialMediaHooks: ArticleSocialMediaHooks;
 }

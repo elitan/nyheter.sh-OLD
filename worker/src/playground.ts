@@ -1,114 +1,56 @@
 import 'dotenv/config';
-import { Transformer, pngQuantize } from '@napi-rs/image';
-import { S3, PutObjectCommand } from '@aws-sdk/client-s3';
-
-const s3Client = new S3({
-  endpoint: 'https://ams3.digitaloceanspaces.com',
-  region: 'us-east-1',
-  credentials: {
-    accessKeyId: process.env.SPACES_KEY as string,
-    secretAccessKey: process.env.SPACES_SECRET as string,
-  },
-});
+import { db } from './utils/db';
+import { FUNCTIONS, GPT_PROMPT_JOURNALIST, openai } from './utils/openai';
+import { AxiosError } from 'axios';
+import { removeLastSentence } from './utils/helpers';
 
 (async () => {
-  // const imagePrompt =
-  //   'funny cartoon on a mountain with a glowing sun in the background';
+  try {
+    const article = await db
+      .selectFrom('articles')
+      .select(['id', 'transcribedText'])
+      .where('id', '=', 996)
+      .executeTakeFirstOrThrow();
 
-  // const url = process.env.STABLE_DIFFUSION_TEXT2IMG_ENDPOINT as string;
-  // const headers = {
-  //   accept: 'application/json',
-  //   'Content-Type': 'application/json',
-  // };
-  // const suBody = JSON.stringify({
-  //   prompt: imagePrompt,
-  //   negative_prompt: 'BadDream, UnrealisticDream',
-  //   steps: 65,
-  //   cfg_scale: 8,
-  //   sampler_index: 'Euler a',
-  //   restore_faces: true,
-  //   width: 1200,
-  //   height: 800,
-  // });
+    const bodyContent = `INFORMATION: ${removeLastSentence(
+      article.transcribedText as string,
+    )} END OF INFORMATION.\n Help me extract article information based on the information above."
+}`;
+    const openAiBodyResponse = await openai.createChatCompletion({
+      messages: [
+        {
+          role: 'system',
+          content: GPT_PROMPT_JOURNALIST,
+        },
+        {
+          role: 'user',
+          content: bodyContent,
+        },
+      ],
+      functions: [FUNCTIONS.getNewsArticleInformation],
+      function_call: {
+        name: FUNCTIONS.getNewsArticleInformation.name,
+      },
+      model: 'gpt-4',
+      temperature: 0.7,
+      max_tokens: 1200,
+    });
 
-  // const response = await fetch(url, {
-  //   method: 'POST',
-  //   headers: headers,
-  //   body: suBody,
-  // });
+    const res = openAiBodyResponse.data.choices[0].message?.function_call
+      ?.arguments as string;
 
-  // const data = await response.json();
+    console.log(res);
 
-  // console.log('data from SU:');
-  // console.log(data);
+    const resJson = JSON.parse(res);
 
-  // // base64 encoded image data
-  // const imageData = `${data.images[0]}`;
+    const r = console.log({ resJson });
+    console.log('done');
+  } catch (error) {
+    console.log('ERROR!!!!');
 
-  // console.log(imageData);
-
-  // const outputTextPath = 'output.txt';
-  // fs.writeFileSync(outputTextPath, imageData, 'utf8');
-
-  // Read txt file content
-  const url = process.env.STABLE_DIFFUSION_TEXT2IMG_ENDPOINT as string;
-  const headers = {
-    accept: 'application/json',
-    'Content-Type': 'application/json',
-  };
-  const suBody = JSON.stringify({
-    prompt: 'sexy sport car driving fast on a road',
-    negative_prompt: 'BadDream, UnrealisticDream',
-    steps: 65,
-    cfg_scale: 8,
-    sampler_index: 'Euler a',
-    restore_faces: true,
-    width: 500,
-    height: 500,
-    batch_size: 2,
-  });
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: headers,
-    body: suBody,
-  });
-
-  const data = await response.json();
-
-  for (const [index, imageData] of data.images.entries()) {
-    console.log(`transform image ${index}`);
-    // const imageData = `${data.images[0]}`;
-
-    const rawImage = Buffer.from(imageData, 'base64');
-
-    const imageBinary = await new Transformer(rawImage).webp(85);
-    // const imageBinary = await pngQuantize(
-    //   await new Transformer(rawImage).png(),
-    //   {
-    //     maxQuality: 75,
-    //     speed: 10,
-    //   },
-    // );
-
-    // upload image to spaces
-    const params = {
-      Bucket: 'nyheter',
-      Key: `test-${index}.webp`,
-      Body: imageBinary,
-      ContentType: 'image/webp',
-      ACL: 'public-read',
-    };
-
-    console.log('uploading...');
-
-    try {
-      await s3Client.send(new PutObjectCommand(params));
-    } catch (e) {
-      console.error('error: ');
-      console.error(e);
-    }
+    const e = error as AxiosError;
+    console.log(e.cause);
+    console.log(e.message);
+    console.log(e.response?.data);
   }
-
-  console.log('done');
 })();

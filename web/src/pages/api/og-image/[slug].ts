@@ -7,8 +7,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // get slug (or something)
-
   const { slug } = req.query as any;
 
   const article = await db
@@ -17,8 +15,6 @@ export default async function handler(
     .select(['articleImages.imageUrl'])
     .where('slug', '=', slug)
     .executeTakeFirstOrThrow();
-
-  // fetch current imageUrl
 
   const rawImage = await getImageAsBuffer(article.imageUrl);
   const imageRaw = await new Transformer(rawImage);
