@@ -13,6 +13,7 @@ import {
 } from '../utils/helpers';
 import { createApi } from 'unsplash-js';
 import * as nodeFetch from 'node-fetch';
+import { ImageInfo } from '@/utils/types';
 
 export const imagesRouter = createTRPCRouter({
   get: protectedProcedure
@@ -42,29 +43,34 @@ export const imagesRouter = createTRPCRouter({
         };
       }
 
-      const images: string[] = [];
+      const images: ImageInfo[] = [];
 
       if (service === 'su') {
-        console.log('ai images');
         // get AI generated (and previously associated images) for this news article
         const images = await db
           .selectFrom('articleImages')
-          .select(['id', 'imageUrl'])
+          .select(['id', 'imageUrl', 'imageIsAiGenerated'])
           .where('articleId', '=', articleId)
           .execute();
 
-        console.log({ images });
-
         return {
           images: images.map((i) => {
-            return i.imageUrl;
+            return {
+              url: i.imageUrl,
+              isAiGenerated: i.imageIsAiGenerated ?? false,
+              creditInfo: '',
+            };
           }),
         };
       } else if (service === 'flickr') {
         const res = await searchFlickrPhotos(query);
 
         res.photos.photo.forEach((photo: any) => {
-          images.push(constructFlickrPhotoUrl(photo as FlickrPhoto));
+          images.push({
+            url: constructFlickrPhotoUrl(photo as FlickrPhoto),
+            isAiGenerated: false,
+            creditInfo: `${photo.ownername}/Flickr`,
+          });
         });
       } else if (service === 'unsplash') {
         const unsplash = createApi({
@@ -78,23 +84,26 @@ export const imagesRouter = createTRPCRouter({
         });
 
         res.response?.results.forEach((photo) => {
-          images.push(photo.urls.regular);
+          images.push({
+            url: photo.urls.regular,
+            isAiGenerated: false,
+            creditInfo: `${photo.user.name}/Unsplash`,
+          });
         });
       } else if (service === 'regeringskansliet') {
         const rkPhotos = await searchRkbildPhotos(query);
 
-        console.log('images length:');
-        console.log(images.length);
-
         rkPhotos.forEach((photo: any) => {
+          console.log(photo.previews);
           // todo: return an photo with a good size, current one is usually too small.
           // console.log(photo);
-          console.log(`https://rkbild.se/${photo.previews[0].href}`);
-          images.push(`https://rkbild.se/${photo.previews[0].href}`);
+          images.push({
+            url: `https://rkbild.se/${photo.previews[0].href}`,
+            isAiGenerated: false,
+            creditInfo: photo.metadata['80'].value,
+          });
         });
       }
-
-      console.log(images);
 
       return {
         images,
@@ -156,17 +165,17 @@ export const imagesRouter = createTRPCRouter({
       z.object({
         articleId: z.number(),
         imageUrl: z.string(),
+        imageIsAiGenerated: z.boolean(),
+        creditInfo: z.string(),
       }),
     )
     .mutation(async ({ input }) => {
-      const { articleId, imageUrl } = input;
+      const { articleId, imageUrl, imageIsAiGenerated, creditInfo } = input;
 
       const rawImage = await getImageAsBuffer(imageUrl);
       const imageBinary = await new Transformer(rawImage).webp(75);
 
       const fileName = `images/${articleId}-${uuidv4()}.webp`;
-
-      console.log({ fileName });
 
       // upload image to spaces
       const params = {
@@ -177,8 +186,6 @@ export const imagesRouter = createTRPCRouter({
         ACL: 'public-read',
       };
 
-      console.log({ params });
-
       await put(params);
 
       const insertedArticleImage = await db
@@ -186,7 +193,8 @@ export const imagesRouter = createTRPCRouter({
         .values({
           articleId,
           imageUrl: `https://nyheter.ams3.cdn.digitaloceanspaces.com/${fileName}`,
-          imageIsAiGenerated: false,
+          imageIsAiGenerated,
+          creditInfo,
         })
         .returning(['id'])
         .executeTakeFirstOrThrow();

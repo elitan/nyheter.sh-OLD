@@ -25,3 +25,9 @@ export const articleSchema = z.object({
   isPublished: z.boolean(),
   isPublishedOnSocialMedia: z.boolean(),
 });
+
+export interface ImageInfo {
+  url: string;
+  isAiGenerated: boolean;
+  creditInfo: string;
+}

@@ -72,6 +72,7 @@ interface FlickrSearchParams {
   nojsoncallback: number;
   sort: string;
   license: string;
+  extras: string;
 }
 
 export async function searchFlickrPhotos(query: string): Promise<any> {
@@ -83,6 +84,7 @@ export async function searchFlickrPhotos(query: string): Promise<any> {
     nojsoncallback: 1,
     sort: 'interestingness-desc',
     license: '4,5,6,9,10',
+    extras: 'owner_name',
   };
 
   // Convert each property to a string

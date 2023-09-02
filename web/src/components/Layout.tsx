@@ -4,7 +4,7 @@ import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { Footer } from './Footer';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useAuth } from '@clerk/nextjs';
 
 function TopBanner() {
   return (
@@ -26,6 +26,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const now = new Date();
   const currentDay = format(now, 'EEEE');
   const currentDate = format(now, 'MMM d, yyyy');
+
+  const { isSignedIn } = useAuth();
 
   return (
     <>
@@ -69,14 +71,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 >
                   About
                 </Link>
-                <a
-                  href="https://nyheter.canny.io/feature-requests"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="h-8 flex items-center border rounded-md px-4 hover:bg-gray-100 transition-all duration-150 ease-out text-gray-800"
-                >
-                  Feedback
-                </a>
+                {isSignedIn && (
+                  <Link
+                    href="/admin"
+                    className="h-8 flex items-center border rounded-md px-4 hover:bg-gray-100 transition-all duration-150 ease-out text-gray-800"
+                  >
+                    Admin
+                  </Link>
+                )}
                 <UserButton />
               </div>
             </div>

@@ -14,6 +14,7 @@ export interface ArticleImages {
   imageIsAiGenerated: Generated<boolean | null>;
   imageUrl: string;
   articleId: number | null;
+  creditInfo: string | null;
 }
 
 export interface Articles {

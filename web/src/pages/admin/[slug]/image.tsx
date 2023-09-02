@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { MainContainer } from '@/components/MainContainer';
 import { search } from 'unsplash-js/dist/internals';
+import { ImageInfo } from '@/utils/types';
 
 interface IParams extends ParsedUrlQuery {
   slug: string;
@@ -158,12 +159,15 @@ export default function Page(
     });
   }
 
-  function handleOnImageClick(imageUrl: string) {
+  function handleOnImageClick(imageInfo: ImageInfo) {
     toast('Updating image...');
+    console.log({ imageInfo });
     updateImageMutation.mutate(
       {
         articleId: article.id,
-        imageUrl,
+        imageUrl: imageInfo.url,
+        imageIsAiGenerated: imageInfo.isAiGenerated,
+        creditInfo: imageInfo.creditInfo,
       },
       {
         onSuccess: () => {
@@ -194,8 +198,6 @@ export default function Page(
       },
     );
   }
-
-  console.log(imagesQuery.data?.images);
 
   useEffect(() => {
     // Attach the paste event listener to the document
@@ -351,8 +353,8 @@ export default function Page(
               return (
                 <img
                   className="cursor-pointer hover:shadow-2xl"
-                  key={image}
-                  src={image}
+                  key={image.url}
+                  src={image.url}
                   onClick={() => handleOnImageClick(image)}
                 />
               );
