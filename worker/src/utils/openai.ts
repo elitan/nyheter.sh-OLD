@@ -36,6 +36,14 @@ export const FUNCTIONS = {
           type: 'string',
           description: `Write a very short and engaging headline of a maximum of 8 words`,
         },
+        // bodySimpleSwedish: {
+        //   type: 'string',
+        //   description: `Write a short, informative, and simple news article without a headline and without mentioning your name. Make the article very easy to read. The news article will be read by people whoe just moved to Sweden and don't speal much Swedish, so it has to be very simple. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. Don't write that the article you're writing is fictional. No more information will be provided. Don't write that no more information will be provided. Write in Swedish.`,
+        // },
+        // headlineSimpleSwedish: {
+        //   type: 'string',
+        //   description: `Write a very short and simple news article headeline in simple Swedish. The translation should be easy to read and be understood by someone who just moved to Sweden.`,
+        // },
         category: {
           type: 'string',
           description: `a single category the article can be associated with`,
@@ -142,6 +150,8 @@ export async function generateArticle(transcribedText: string) {
   const articleResponseSchema = z.object({
     body: z.string(),
     headline: z.string(),
+    bodySimpleSwedish: z.string(),
+    headlineSimpleSwedish: z.string(),
     category: z.string(),
     imagePrompt: z.string(),
     socialMediaHook1: z.string(),

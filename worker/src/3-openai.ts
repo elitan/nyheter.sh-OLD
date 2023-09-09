@@ -50,12 +50,17 @@ import slugify from 'slugify';
     let {
       headline: title,
       body,
+      headlineSimpleSwedish: titleSimpleSwedish,
+      bodySimpleSwedish,
       category,
       imagePrompt,
       socialMediaHook1,
       socialMediaHook2,
       socialMediaHook3,
     } = generatedArticle;
+
+    console.log('simple swedish title: ', titleSimpleSwedish);
+    console.log('simple swedish body: ', bodySimpleSwedish);
 
     console.log('replace optional quotes in the title');
 

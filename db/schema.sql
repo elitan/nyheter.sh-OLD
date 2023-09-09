@@ -73,5 +73,5 @@ CREATE OR REPLACE TRIGGER article_social_media_hooks_update_updated_at
   EXECUTE FUNCTION update_updated_at_column();
 
 ALTER TABLE article_social_media_hooks
-  ADD CONSTRAINT fk_article_social_media_hooks_article_id FOREIGN KEY (article_id) REFERENCES articles(id);
+  ADD CONSTRAINT fk_article_social_media_hooks_article_id FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE;
 
