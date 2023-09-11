@@ -9,6 +9,7 @@ import { bestArticleToPublish } from './utils/openai';
     .selectFrom('articles as a')
     .select(['a.id', 'a.title', 'a.body', 'a.slug'])
     .where('isPublishedOnSocialMedia', '=', false)
+    .where('isPublished', '=', true)
     .where(
       'createdAt',
       '>',
