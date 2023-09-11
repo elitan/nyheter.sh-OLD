@@ -36,14 +36,6 @@ export const FUNCTIONS = {
           type: 'string',
           description: `Write a very short and engaging headline of a maximum of 8 words`,
         },
-        // bodySimpleSwedish: {
-        //   type: 'string',
-        //   description: `Write a short, informative, and simple news article without a headline and without mentioning your name. Make the article very easy to read. The news article will be read by people whoe just moved to Sweden and don't speal much Swedish, so it has to be very simple. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. Don't write that the article you're writing is fictional. No more information will be provided. Don't write that no more information will be provided. Write in Swedish.`,
-        // },
-        // headlineSimpleSwedish: {
-        //   type: 'string',
-        //   description: `Write a very short and simple news article headeline in simple Swedish. The translation should be easy to read and be understood by someone who just moved to Sweden.`,
-        // },
         category: {
           type: 'string',
           description: `a single category the article can be associated with`,
@@ -74,6 +66,26 @@ export const FUNCTIONS = {
         'socialMediaHook2',
         'socialMediaHook3',
       ],
+    },
+  },
+  bestArticleToPublish: {
+    name: 'bestArticleToPublish',
+    description:
+      'The article to publish that has the highest news value and the best social media hook to engage readers',
+    parameters: {
+      type: 'object',
+      properties: {
+        articleId: {
+          type: 'number',
+          description: 'The id of the article to publish',
+        },
+        socialMediaHook: {
+          type: 'string',
+          description:
+            'The best social media hook to use for the current article',
+        },
+      },
+      required: ['articleId', 'socialMediaHook'],
     },
   },
 };
@@ -160,4 +172,42 @@ export async function generateArticle(transcribedText: string) {
   });
 
   return articleResponseSchema.parse(resJson);
+}
+
+export async function bestArticleToPublish(
+  content: any,
+): Promise<{ articleId: number; socialMediaHook: string }> {
+  const bodyContent = `INFORMATION:\n${content}\nEND OF INFORMATION.\nHelp me decide what news article to publish based on the title, body and social media hook. I want you to pick the news article that has the best potential to engage users on social media.`;
+
+  const openAiBodyResponse = await openai.createChatCompletion({
+    messages: [
+      {
+        role: 'system',
+        content: GPT_PROMPT_ASSISTANT,
+      },
+      {
+        role: 'user',
+        content: bodyContent,
+      },
+    ],
+    functions: [FUNCTIONS.bestArticleToPublish],
+    function_call: {
+      name: FUNCTIONS.bestArticleToPublish.name,
+    },
+    model: 'gpt-3.5-turbo',
+    temperature: 0.7,
+    max_tokens: 1200,
+  });
+
+  const body =
+    openAiBodyResponse.data.choices[0].message?.function_call?.arguments;
+
+  const resJson = JSON.parse(body as string);
+
+  const responseSchema = z.object({
+    articleId: z.number(),
+    socialMediaHook: z.string(),
+  });
+
+  return responseSchema.parse(resJson);
 }

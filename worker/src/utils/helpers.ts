@@ -1,5 +1,10 @@
 import * as child_process from 'child_process';
 
+export function getFirstTwoSentences(text: string): string {
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+  return sentences.slice(0, 2).join(' ');
+}
+
 /**
  * Removes the last sentence from a string.
  */
@@ -35,4 +40,23 @@ export async function runCommand(cmd: string, timeout = 5000): Promise<string> {
       resolve(stdout ? stdout : stderr);
     });
   });
+}
+
+export async function postToFacebook(
+  post: string,
+  link: string,
+): Promise<void> {
+  console.log(process.env.FACEBOOK_ACCESS_TOKEN);
+
+  const url = `https://graph.facebook.com/v17.0/nyheter.sh/feed?message=${encodeURIComponent(
+    post,
+  )}&link=${encodeURIComponent(link)}&access_token=${
+    process.env.FACEBOOK_ACCESS_TOKEN
+  }`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+  });
+
+  return await response.json();
 }
