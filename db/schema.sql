@@ -15,7 +15,7 @@ CREATE TABLE article_images(
   article_id integer,
   image_url text NOT NULL,
   image_prompt text,
-  image_is_ai_generated boolean DEFAULT TRUE,
+  image_is_ai_generated boolean DEFAULT FALSE,
   credit_info text
 );
 

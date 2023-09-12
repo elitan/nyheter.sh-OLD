@@ -154,16 +154,16 @@ export async function generateArticle(transcribedText: string) {
     max_tokens: 1200,
   });
 
-  const res = openAiBodyResponse.data.choices[0].message?.function_call
+  const jsonString = openAiBodyResponse.data.choices[0].message?.function_call
     ?.arguments as string;
 
-  const resJson = JSON.parse(res);
+  const sanitizedJsonString = jsonString.replace(/\t/g, '\\t');
+
+  const resJson = JSON.parse(sanitizedJsonString);
 
   const articleResponseSchema = z.object({
     body: z.string(),
     headline: z.string(),
-    // bodySimpleSwedish: z.string(),
-    // headlineSimpleSwedish: z.string(),
     category: z.string(),
     imagePrompt: z.string(),
     socialMediaHook1: z.string(),
