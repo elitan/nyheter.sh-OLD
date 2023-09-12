@@ -162,8 +162,8 @@ export async function generateArticle(transcribedText: string) {
   const articleResponseSchema = z.object({
     body: z.string(),
     headline: z.string(),
-    bodySimpleSwedish: z.string(),
-    headlineSimpleSwedish: z.string(),
+    // bodySimpleSwedish: z.string(),
+    // headlineSimpleSwedish: z.string(),
     category: z.string(),
     imagePrompt: z.string(),
     socialMediaHook1: z.string(),
