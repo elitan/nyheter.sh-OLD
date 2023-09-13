@@ -46,8 +46,6 @@ export async function postToFacebook(
   post: string,
   link: string,
 ): Promise<void> {
-  console.log(process.env.FACEBOOK_ACCESS_TOKEN);
-
   const url = `https://graph.facebook.com/v17.0/nyheter.sh/feed?message=${encodeURIComponent(
     post,
   )}&link=${encodeURIComponent(link)}&access_token=${

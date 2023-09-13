@@ -24,6 +24,8 @@ export const getServerSideProps = async () => {
     .limit(25)
     .execute();
 
+  console.log(articles);
+
   return {
     props: {
       articles,

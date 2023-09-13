@@ -157,6 +157,9 @@ export async function generateArticle(transcribedText: string) {
   const jsonString = openAiBodyResponse.data.choices[0].message?.function_call
     ?.arguments as string;
 
+  console.log(openAiBodyResponse.data.choices[0].message);
+  console.log(jsonString);
+
   const sanitizedJsonString = jsonString.replace(/\t/g, '\\t');
 
   const resJson = JSON.parse(sanitizedJsonString);
