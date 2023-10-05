@@ -27,7 +27,7 @@ export async function searchRkbildPhotos(query: string): Promise<any> {
   const url =
     queryString !== 'q='
       ? `https://rkbild.se/fotoweb/archives/5000-Bildbank/?${queryString}`
-      : 'https://rkbild.se/fotoweb/archives/5000-Bildbank/;p=90';
+      : 'https://rkbild.se/fotoweb/archives/5000-Bildbank/;p=97';
 
   const headers =
     queryString !== 'q='

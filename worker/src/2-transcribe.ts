@@ -45,6 +45,12 @@ function runCommand(cmd: string, timeout = 5000): Promise<string> {
         continue;
       }
 
+      // we're skipping 'direkt' episodes because they're sometimes live and causes issues for whisper. For some reason, the timeout isn't working correctly killing the process.
+      if (article.sverigesRadioTitle.includes('direkt')) {
+        console.log(`title includes 'direkt', skipping`);
+        continue;
+      }
+
       console.log(`Downloading episode...`);
       try {
         await runCommand(
