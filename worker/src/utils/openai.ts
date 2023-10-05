@@ -30,11 +30,11 @@ export const FUNCTIONS = {
       properties: {
         body: {
           type: 'string',
-          description: `Write a short, informative, and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. Don't write that the article you're writing is fictional. No more information will be provided. Don't write that no more information will be provided. Write in English.`,
+          description: `Write a short, informative, and simple news article without a headline and without mentioning your name. Make the article easy to read by adding paragraphs where needed. Also make the article engaging as if it's written by the best journalist in the world. Don't mention Ekot, Sveriges Radio or P4. The information is real and complete. Don't write that the article you're writing is fictional. No more information will be provided. Don't write that no more information will be provided. Write in English.`,
         },
         headline: {
           type: 'string',
-          description: `Write a very short and engaging headline of a maximum of 8 words`,
+          description: `Write a very short and engaging headline of a maximum of 8 words to hook the reader.`,
         },
         category: {
           type: 'string',
