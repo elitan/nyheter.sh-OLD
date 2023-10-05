@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <>
       {/* <TopBanner /> */}
       <div className="bg-slate-200">
-        <div className="bg-white">
+        <div className="bg-white top-0 sticky">
           <MainContainer>
             <div className="flex flex-col md:flex-row space-y-4 text-left justify-between py-4 items-center">
               <Link className="space-x-4 flex items-center" href="/">

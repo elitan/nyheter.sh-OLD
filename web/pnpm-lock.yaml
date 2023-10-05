@@ -78,11 +78,11 @@ dependencies:
     specifier: ^2.0.0
     version: 2.0.0
   kysely:
-    specifier: ^0.26.1
-    version: 0.26.1
+    specifier: ^0.26.3
+    version: 0.26.3
   kysely-codegen:
     specifier: ^0.10.1
-    version: 0.10.1(kysely@0.26.1)(pg@8.11.1)
+    version: 0.10.1(kysely@0.26.3)(pg@8.11.1)
   next:
     specifier: 13.4.12
     version: 13.4.12(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0)
@@ -4376,7 +4376,7 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /kysely-codegen@0.10.1(kysely@0.26.1)(pg@8.11.1):
+  /kysely-codegen@0.10.1(kysely@0.26.3)(pg@8.11.1):
     resolution: {integrity: sha512-8Bslh952gN5gtucRv4jTZDFD18RBioS6M50zHfe5kwb5iSyEAunU4ZYMdHzkHraa4zxjg5/183XlOryBCXLRIw==}
     hasBin: true
     peerDependencies:
@@ -4394,14 +4394,14 @@ packages:
     dependencies:
       chalk: 4.1.2
       dotenv: 16.3.1
-      kysely: 0.26.1
+      kysely: 0.26.3
       micromatch: 4.0.5
       minimist: 1.2.8
       pg: 8.11.1
     dev: false
 
-  /kysely@0.26.1:
-    resolution: {integrity: sha512-FVRomkdZofBu3O8SiwAOXrwbhPZZr8mBN5ZeUWyprH29jzvy6Inzqbd0IMmGxpd4rcOCL9HyyBNWBa8FBqDAdg==}
+  /kysely@0.26.3:
+    resolution: {integrity: sha512-yWSgGi9bY13b/W06DD2OCDDHQmq1kwTGYlQ4wpZkMOJqMGCstVCFIvxCCVG4KfY1/3G0MhDAcZsip/Lw8/vJWw==}
     engines: {node: '>=14.0.0'}
     dev: false
 

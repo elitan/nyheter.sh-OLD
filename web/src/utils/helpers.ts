@@ -16,7 +16,7 @@ export function renderAgo(date: Date) {
   } else if (minutes < 60 * 24 * 2) {
     return `Yesterday`;
   } else {
-    return format(date, 'd MMMM, HH:mm');
+    return format(date, `d MMMM, HH:mm`);
   }
 }
 

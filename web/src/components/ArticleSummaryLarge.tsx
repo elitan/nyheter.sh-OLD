@@ -20,14 +20,11 @@ export function ArticleSummaryLarge({ article }: { article: any }) {
   return (
     <div
       key={article.id}
-      className={`flex my-2 space-x-4 md:col-span-1 col-span-2 border-b-2 border-gray-200 py-2`}
+      className={`flex space-x-4 md:col-span-1 col-span-2 border-b-1 border-gray-200 my-0 py-0 `}
     >
-      <Link
-        className="w-full rounded-lg p-1 "
-        href={`/nyheter/${article.slug}`}
-      >
+      <Link className="w-full" href={`/nyheter/${article.slug}`}>
         <div
-          className={`border border-gray-200 rounded-md h-64`}
+          className={`border border-gray-200 h-80`}
           style={{
             backgroundImage: `url(${article.imageUrl})`,
             backgroundPosition: 'center',
@@ -35,8 +32,8 @@ export function ArticleSummaryLarge({ article }: { article: any }) {
           }}
         />
 
-        <div className="py-3">
-          <h1 className="w-full text-3xl lg:text-4xl mb-1 font-semibold font-serif">
+        <div className="p-4">
+          <h1 className="w-full text-2xl lg:text-4xl mb-1 font-semibold font-serif">
             {article.title}
           </h1>
           <p className="text-gray-700 line-clamp-2 font-serif">{summary}</p>

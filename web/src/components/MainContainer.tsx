@@ -7,7 +7,7 @@ interface Props {
 export function MainContainer(props: Props) {
   const { children, className } = props;
 
-  const classNames = twMerge(`max-w-6xl mx-auto px-2`, className);
+  const classNames = twMerge(`max-w-5xl mx-auto px-2`, className);
 
   return <div className={classNames}>{children}</div>;
 }

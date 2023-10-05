@@ -20,18 +20,18 @@ export function ArticleSummarySmall({ article }: { article: any }) {
   return (
     <div
       key={article.id}
-      className={`flex space-x-4 md:col-span-1 col-span-2 py-1 lg:py-4 group`}
+      className={`flex space-x-4 md:col-span-1 col-span-2 py-1 lg:py-4 group px-4`}
     >
       <Link
         className="w-full rounded-lg p-1 flex justify-between space-x-4 items-start"
         href={`/nyheter/${article.slug}`}
       >
-        <div className="py-1 lg:py-3">
+        <div className="py-1 lg:py-2">
           <h1 className="w-full text-lg lg:text-xl mb-1 font-semibold font-serif group-hover:text-gray-500">
             {article.title}
           </h1>
           <p className="text-gray-700 line-clamp-2 font-serif">{summary}</p>
-          <div className="flex mr-6 mt-3 ">
+          <div className="flex mr-6 mt-3">
             <div>
               <p className="text-gray-500 text-xs">
                 {renderAgo(article.createdAt as Date)}
