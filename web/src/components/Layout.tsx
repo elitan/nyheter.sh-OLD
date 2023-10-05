@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="bg-slate-200">
         <div className="bg-white top-0 sticky">
           <MainContainer>
-            <div className="flex flex-col md:flex-row space-y-4 text-left justify-between py-4 items-center">
+            <div className="relative flex flex-col md:flex-row space-y-4 text-left justify-between py-4 items-center">
               <Link className="space-x-4 flex items-center" href="/">
                 <div>
                   <img src="/logo.png" className="h-10 w-10 " alt="Logo" />
@@ -47,13 +47,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </h2>
                   </div>
                   <div>
-                    <h1 className="text-gray-900 font-semibold text-2xl">
+                    <h1 className="text-gray-900 font-semibold text-xl">
                       Swedish News in English
                     </h1>
                   </div>
                 </div>
               </Link>
-              <div className="justify-between text-sm space-x-8 hidden md:flex">
+              <div className="absolute w-full justify-center text-sm space-x-8 hidden md:flex ">
                 <div className="flex items-center space-x-2">
                   <div>
                     <CalendarDaysIcon className="h-7 w-7" />
