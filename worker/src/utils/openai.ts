@@ -1,9 +1,10 @@
-import { Configuration, OpenAIApi } from 'openai';
-import 'dotenv/config';
+import { OpenAI } from 'openai';
 import { z } from 'zod';
+
+import 'dotenv/config';
 import { removeLastSentence } from './helpers';
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
@@ -90,15 +91,13 @@ export const FUNCTIONS = {
   },
 };
 
-export const openai = new OpenAIApi(configuration);
-
 export const GPT_PROMPT_JOURNALIST = `You are a journalist who writes independent news articles. The news articles you write follow journalistic standards and are informative and engaging for the reader.`;
 export const GPT_PROMPT_ASSISTANT = `You are a helpful assistant`;
 
 export async function textIsRelatedToSweden(text: string): Promise<boolean> {
   const bodyContent = `INFORMATION:\n${text}\nEND OF INFORMATION.\nHelp me with classifying the information above. Is the information related to Sweden or not?`;
 
-  const openAiBodyResponse = await openai.createChatCompletion({
+  const openAiBodyResponse = await openai.chat.completions.create({
     messages: [
       {
         role: 'system',
@@ -118,8 +117,7 @@ export async function textIsRelatedToSweden(text: string): Promise<boolean> {
     max_tokens: 500,
   });
 
-  const body =
-    openAiBodyResponse.data.choices[0].message?.function_call?.arguments;
+  const body = openAiBodyResponse.choices[0].message?.function_call?.arguments;
 
   const bodyObject = JSON.parse(body as string);
   return bodyObject.isRelatedToSweden;
@@ -134,7 +132,7 @@ export async function generateArticle(transcribedText: string) {
   Help me extract article information based on the information above.
   `;
 
-  const openAiBodyResponse = await openai.createChatCompletion({
+  const openAiBodyResponse = await openai.chat.completions.create({
     messages: [
       {
         role: 'system',
@@ -154,10 +152,10 @@ export async function generateArticle(transcribedText: string) {
     max_tokens: 1200,
   });
 
-  const jsonString = openAiBodyResponse.data.choices[0].message?.function_call
+  const jsonString = openAiBodyResponse.choices[0].message?.function_call
     ?.arguments as string;
 
-  console.log(openAiBodyResponse.data.choices[0].message);
+  console.log(openAiBodyResponse.choices[0].message);
   console.log(jsonString);
 
   const sanitizedJsonString = jsonString.replace(/\t/g, '\\t');
@@ -182,7 +180,7 @@ export async function bestArticleToPublish(
 ): Promise<{ articleId: number; socialMediaHook: string }> {
   const bodyContent = `INFORMATION:\n${content}\nEND OF INFORMATION.\nHelp me decide what news article to publish based on the title, body and social media hook. I want you to pick the news article that has the best potential to engage users on social media.`;
 
-  const openAiBodyResponse = await openai.createChatCompletion({
+  const openAiBodyResponse = await openai.chat.completions.create({
     messages: [
       {
         role: 'system',
@@ -202,8 +200,7 @@ export async function bestArticleToPublish(
     max_tokens: 1200,
   });
 
-  const body =
-    openAiBodyResponse.data.choices[0].message?.function_call?.arguments;
+  const body = openAiBodyResponse.choices[0].message?.function_call?.arguments;
 
   const resJson = JSON.parse(body as string);
 

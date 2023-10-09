@@ -1,6 +1,7 @@
+import slugify from 'slugify';
+
 import { db } from './utils/db';
 import { generateArticle, textIsRelatedToSweden } from './utils/openai';
-import slugify from 'slugify';
 
 (async () => {
   const articlesToRefine = await db
@@ -21,11 +22,15 @@ import slugify from 'slugify';
     console.log('check if the source information is related to sweden');
 
     // check if the article is related to sweden or not
-    const isRelatedToSweden = await textIsRelatedToSweden(
-      article.transcribedText as string,
-    );
-
-    console.log({ isRelatedToSweden });
+    let isRelatedToSweden = false;
+    try {
+      isRelatedToSweden = await textIsRelatedToSweden(
+        article.transcribedText as string,
+      );
+    } catch (e) {
+      console.error('error: ', e);
+      continue;
+    }
 
     await db
       .updateTable('articles')
@@ -43,7 +48,13 @@ import slugify from 'slugify';
 
     console.log('generate article...');
 
-    const generatedArticle = await generateArticle(article.transcribedText);
+    let generatedArticle = null;
+    try {
+      generatedArticle = await generateArticle(article.transcribedText);
+    } catch (e) {
+      console.error(e);
+      continue;
+    }
 
     console.log('article generation compelted');
 
