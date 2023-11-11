@@ -1,0 +1,4 @@
+PATH=/home/elitan/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+# screen that starts stable diffusino
+@reboot /usr/bin/screen -dmS su /bin/bash -c 'while true; do /home/elitan/code/stable-diffusion-webui/webui.sh --listen --api --xformers; sleep 1; done'
