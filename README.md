@@ -40,4 +40,4 @@ Here's my take:
 
 - I don't use their content to train any AI model. The model is already trained by OpenAI.
 - Yes I transcribe the audio, but I don't store it. I delete it after I've transcribed it. So I don't understand how this is a copyright claim. OpenAI also has something called [Copyright Sheild](https://openai.com/blog/new-models-and-developer-products-announced-at-devday#:~:text=account%20settings.-,Copyright%20Shield,-OpenAI%20is%20committed). I've reached out to OpenAI asking for guidence. Still waiting for an answer.
-- I don't publish any of their material.
+- I don't publish any of Sveriges Radio's material. I use it as a source to write a new unique news article in different languages.
